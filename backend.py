@@ -9,8 +9,8 @@ app = Flask(__name__)
 secure= False
 
 roomName = ['Rover', 'Server Room','Speed']
-accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain'],['+','-']]
-outPin = [[7, 17, 27, 22],[],[12,13]]
+accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain'],['-','+']]
+outPin = [[7, 17, 27, 22],[27],[12,13]]
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -143,16 +143,15 @@ def toggle(roomNumber, accNumber):
 @app.route("/clicker/<int:roomNumber>/<int:accNumber>/")
 @crossdomain(origin='*')
 def tick(roomNumber, accNumber):
-	'''
+	
 	if len(outPin[roomNumber]) != 0:
-		#state= 1 - GPIO.input(outPin[roomNumber][accNumber])
-		#GPIO.output(outPin[roomNumber][accNumber], state)
+		state= 1 - GPIO.input(outPin[roomNumber][accNumber])
+		GPIO.output(outPin[roomNumber][accNumber], state)
 		#subprocess.call(['./echo.sh'], shell=True)
-		pass
 	else:
 		#for handling empty rooms for other rooms
 		subprocess.call(['./echo.sh'], shell=True)
-		'''
+		
 	#print(roomNumber, accNumber)
 	buttonHtmlName = accName[roomNumber][accNumber].replace(" ", "<br>")
 	passer="<button class='%s' onclick='tick(%d,%d)'>%s</button>" % ("containerOff", roomNumber, accNumber, buttonHtmlName)
