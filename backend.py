@@ -2,6 +2,7 @@ from datetime import timedelta
 from functools import update_wrapper
 from flask import Flask, render_template, redirect, Markup, make_response, request, current_app
 #import RPi.GPIO as GPIO
+import GPIO
 import subprocess, os, datetime, time, json
 
 app = Flask(__name__)
@@ -11,15 +12,14 @@ roomName = ['Rover', 'Server Room','Speed']
 accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain'],['+','-']]
 outPin = [[7, 17, 27, 22],[],[12,13]]
 
-#GPIO.setmode(GPIO.BCM)
-#GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
 
 for i in range(len(outPin)):
-	pass
-	#GPIO.setup(outPin[i], GPIO.OUT, initial=GPIO.LOW)
+	GPIO.setup(outPin[i], GPIO.OUT, initial=GPIO.LOW)
 
 def accState(roomNumber, accNumber):
-	if True:#GPIO.input(outPin[roomNumber][accNumber]) is 1:
+	if GPIO.input(outPin[roomNumber][accNumber]) is 1:
 		return 'containerOn'
 	else:
 		return 'containerOff'
@@ -115,9 +115,8 @@ def buttonStates():
 
 @app.route("/setstate/<int:roomNumber>/<int:accNumber>/<int:state>/")
 def setstate(roomNumber, accNumber, state):
-	if len(outPin[roomNumber]) != 0:
-		pass
-		#GPIO.output(outPin[roomNumber][accNumber], 1 - state)
+	if len(outPin[roomNumber]) == 1:
+		GPIO.output(outPin[roomNumber][accNumber], 1 - state)
 	#subprocess.call(['./echo.sh'], shell=True)
 	else:
 		#action for other rooms
@@ -129,8 +128,8 @@ def setstate(roomNumber, accNumber, state):
 @crossdomain(origin='*')
 def toggle(roomNumber, accNumber):
 	if len(outPin[roomNumber]) != 0:
-		#state= 1 - GPIO.input(outPin[roomNumber][accNumber])
-		#GPIO.output(outPin[roomNumber][accNumber], state)
+		state= 1 - GPIO.input(outPin[roomNumber][accNumber])
+		GPIO.output(outPin[roomNumber][accNumber], state)
 		#subprocess.call(['./echo.sh'], shell=True)
 		pass
 	else:
@@ -156,7 +155,7 @@ def tick(roomNumber, accNumber):
 		'''
 	#print(roomNumber, accNumber)
 	buttonHtmlName = accName[roomNumber][accNumber].replace(" ", "<br>")
-	passer="<button class='%s' onclick='tick(%d,%d)'>%s</button>" % (accState(roomNumber,accNumber), roomNumber, accNumber, buttonHtmlName)
+	passer="<button class='%s' onclick='tick(%d,%d)'>%s</button>" % ("containerOff", roomNumber, accNumber, buttonHtmlName)
 	return passer
 
 if __name__ == "__main__":
