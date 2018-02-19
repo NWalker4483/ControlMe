@@ -1,6 +1,6 @@
 from datetime import timedelta
 from functools import update_wrapper
-from flask import Flask, render_template, redirect, Markup, make_response, request, current_app
+from flask import Flask, render_template, redirect, Markup, make_response, request, current_app, Response
 #import RPi.GPIO as GPIO
 import GPIO
 import subprocess, os, datetime, time, json
@@ -156,7 +156,16 @@ def tick(roomNumber, accNumber):
 	buttonHtmlName = accName[roomNumber][accNumber].replace(" ", "<br>")
 	passer="<button class='%s' onclick='tick(%d,%d)'>%s</button>" % ("containerOff", roomNumber, accNumber, buttonHtmlName)
 	return passer
-
+def gen(camera):
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+from camera import VideoCamera
+@app.route('/video_feed')
+def video_feed():
+    return Response(gen(VideoCamera()),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 if __name__ == "__main__":
 	if secure is True:
 		app.run(host='0.0.0.0', port=8000, debug=True, ssl_context=('WebGPIO.cer', 'WebGPIO.key'))
