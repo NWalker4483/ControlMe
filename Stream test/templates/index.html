@@ -35,10 +35,11 @@
     </script>
 </head>
 <body>
-        <img width=75% height=300px id="bg" src="{{ url_for('video_feed') }}">
+        '<img width=75% height=300px id="bg" src="{{ url_for('video_feed') }}">'
     <h1>Test</h1>
     <div id="time"></div>
     <h2>Orientation du regard</h2> <br>
+    {% include "tel.html" %}
     <input id="slider" type="range" min="0" max="1" value="0.5" step="0.01"/> <br>
 </body>
 </html>  

@@ -3,7 +3,7 @@
 # Set this variable to "threading", "eventlet" or "gevent" to test the
 # different async modes, or leave it set to None for the application to choose
 # the best option based on available packages.
-async_mode = None
+async_mode = 'threading'
 from flask import Flask, render_template, redirect, Markup, make_response, request, current_app, Response
 
 if async_mode is None:
@@ -64,6 +64,7 @@ class Engine(Thread):
                           namespace='/test')
             
 @app.route('/')
+
 def index():
     global thread
     if thread is None:
@@ -75,16 +76,10 @@ def index():
 @socketio.on('robot', namespace='/test')    
 def handle_robot(message):
     thread.flow[message['motor']]=message['value']
-    
-@socketio.on('pad', namespace='/test')    
-def handle_pad(message):
-    thread.flow['alpha']=message['alpha']
-    thread.flow['beta']=message['beta']
-    thread.flow['gamma']=message['gamma']
-
 def gen(camera):
     while True:
         frame = camera.get_frame()
+
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 from camera import VideoCamera
@@ -92,6 +87,18 @@ from camera import VideoCamera
 @app.route('/video_feed')
 def video_feed():
     return Response(gen(VideoCamera()),
-                    mimetype='multipart/x-mixed-replace; boundary=frame')
+                    mimetype='multipart/x-mixed-replace; boundary=frame')    
+@socketio.on('pad', namespace='/test')    
+def handle_pad(message):
+    thread.flow['alpha']=message['alpha']
+    thread.flow['beta']=message['beta']
+    thread.flow['gamma']=message['gamma']
+
+
+@app.route('/tel')
+def tel():
+    frame_name = "dogs"
+    return render_template("tel.html", fname=frame_name)
+
 if __name__ == '__main__':
     socketio.run(app,host='0.0.0.0',debug=True)

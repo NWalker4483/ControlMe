@@ -9,7 +9,7 @@ import subprocess, os, datetime, time, json
 #from pisces import ESC
 import random
 
-async_mode = None
+async_mode = 'threading'
 
 if async_mode is None:
     try:
@@ -229,7 +229,7 @@ def tick(roomNumber, accNumber):
 	buttonHtmlName = accName[roomNumber][accNumber].replace(" ", "<br>")
 	passer="<button class='%s' onclick='tick(%d,%d)'>%s</button>" % ("containerOff", roomNumber, accNumber, buttonHtmlName)
 	return passer
-'''
+
 def gen(camera):
     while True:
         frame = camera.get_frame()
@@ -241,7 +241,7 @@ from camera import VideoCamera
 def video_feed():
     return Response(gen(VideoCamera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
-'''
+
 if __name__ == "__main__":
 	if secure is True:
 		#app.run(host='0.0.0.0', port=8000, debug=True, ssl_context=('WebGPIO.cer', 'WebGPIO.key'))
