@@ -1,0 +1,77 @@
+body {
+      position: relative;
+      margin: 0;
+      padding-bottom: 6rem;
+      min-height: 100%;
+      font-family: HelveticaNeue-UltraLight, Arial, sans-serif;
+}
+.roomtitle{
+   font-family:HelveticaNeue-Light, Arial, sans-serif;
+   font-size:200%;
+   font-weight:100;
+   color:#F7F7F7;
+   text-align: center;
+}
+.containerOn{
+   width:152px;
+   height:152px;
+   font-family:HelveticaNeue-UltraLight, Arial, sans-serif;
+   font-size:200%;
+   background-color: white;
+   border: none;
+   text-align: center;
+   border-radius: 152px;
+   margin: auto 4px 12px 4px;
+   vertical-align: middle;
+}
+.containerOff{
+   width:152px;
+   height:152px;
+   font-family:HelveticaNeue-UltraLight, Arial, sans-serif;
+   font-size:200%;
+   color:#F7F7F7;
+   background-color: black;
+   border: 1px solid #F7F7F7;
+   text-align: center;
+   border-radius: 152px;
+   margin: auto 4px 12px 4px;
+   vertical-align: middle;
+}
+.slidecontainer {
+width: 100%; /* Width of the outside container */
+}
+
+/* The slider itself */
+.slider {
+-webkit-appearance: none;  /* Override default CSS styles */
+appearance: none;
+width: 100%; /* Full-width */
+height: 35px; /* Specified height */
+background: #d3d3d3; /* Grey background */
+outline: none; /* Remove outline */
+opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+transition: opacity .2s;
+}
+
+/* Mouse-over effects */
+.slider:hover {
+opacity: 1; /* Fully shown on mouse-over */
+}
+/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
+.slider::-webkit-slider-thumb {
+-webkit-appearance: none; /* Override default look */
+appearance: none;
+width: 35px; /* Set a specific slider handle width */
+height: 35px; /* Slider handle height */
+background: #585858; /* Green background */
+cursor: pointer; /* Cursor on hover */
+border:#F7F7F7;
+}
+.slider::-moz-range-thumb {
+width: 40px; /* Set a specific slider handle width */
+height: 40px; /* Slider handle height */
+background: #585858; /* Green background */
+cursor: pointer; /* Cursor on hover */
+}
+ 

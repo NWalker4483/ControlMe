@@ -59,19 +59,20 @@ class Engine(Thread):
         display = ''
         while True:
             time.sleep(0.05)
-            self.flow["t"] = time.time()
+            #self.flow["Time"] = time.time()
             flowstr = str(self.flow)
             flowstr = flowstr.replace(',','<br>')
             flowstr = flowstr.replace('{','')
             flowstr = flowstr.replace('}','')
+            flowstr = flowstr.replace("'",'')
             socketio.emit('flow',
                           {'data': flowstr},
                           namespace='/test')
 secure= False
-
-roomName = ['Rover', 'Server Room','Speed']
-accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain'],['-','+']]
-outPin = [[7, 17, 27, 22],[27],[12,13]]
+Sliders=['Speed','Doggos']
+roomName = ['Rover', 'Server Room']
+accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain']]
+outPin = [[7, 17, 27, 22],[27]]
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
@@ -134,26 +135,23 @@ def grid():
 		passer = passer + "<p class='roomtitle'>%s</p>" % (roomName[i])
 		for j in range(len(accName[i])):
 			buttonHtmlName = accName[i][j].replace(" ", "<br>")
-			if i!=2:
-				passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
-			else:
-				passer = passer + "<span id='button%d%d'><button class='%s' onclick='tick(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
+			passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
 	return passer
+
+
 @app.route("/")
 def main():
 	now = datetime.datetime.now()
 	timeString = now.strftime("%Y-%m-%d %I:%M %p")
-	
 	passer = ''
 	for i in range(len(roomName)):
 		passer = passer + "<p class='roomtitle'>%s</p>" % (roomName[i])
 		for j in range(len(accName[i])):
 			buttonHtmlName = accName[i][j].replace(" ", "<br>")
-			if i!=2:
-				passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
-			else:
-				passer = passer + "<span id='button%d%d'><button class='%s' onclick='tick(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
-			
+			passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
+	for i in range(len(Sliders)):
+		passer = passer + "<div><p class='roomtitle' id='%s'></p>" % (Sliders[i]+'a')
+		passer = passer + "	<input class='slider' id='%s' type='range' min='0' max='1' value='0.5' step='0.01'/> <br></div>" % (Sliders[i])
 	buttonGrid = Markup(passer)
 	templateData = {
 		'title' : 'MSU RMC Control Center',
@@ -161,22 +159,22 @@ def main():
 		'buttons' : buttonGrid,
 	}
 	global thread
-	if thread is None:
-		thread = Engine()
-		thread.daemon = True
-		thread.start()
+	#if thread is None:
+	thread = Engine()
+	thread.daemon = True
+	thread.start()
 	return render_template('main.html', **templateData)
+
 @socketio.on('robot', namespace='/test')    
 def handle_robot(message):
 	thread.flow[message['motor']]=message['value']
-	print(message['value'])
-    
+'''    
 @socketio.on('pad', namespace='/test')    
 def handle_pad(message):
     thread.flow['alpha']=message['alpha']
     thread.flow['beta']=message['beta']
     thread.flow['gamma']=message['gamma']
-    
+    '''
 @app.route("/statelist/")
 def buttonStates():
 	accState=[]
@@ -199,6 +197,7 @@ def setstate(roomNumber, accNumber, state):
 							   
 @app.route("/button/<int:roomNumber>/<int:accNumber>/")
 @crossdomain(origin='*')
+
 def toggle(roomNumber, accNumber):
 	if len(outPin[roomNumber]) != 0:
 		state= 1 - GPIO.input(outPin[roomNumber][accNumber])
@@ -211,23 +210,6 @@ def toggle(roomNumber, accNumber):
 	#print(roomNumber, accNumber)
 	buttonHtmlName = accName[roomNumber][accNumber].replace(" ", "<br>")
 	passer="<button class='%s' onclick='toggle(%d,%d)'>%s</button>" % (accState(roomNumber,accNumber), roomNumber, accNumber, buttonHtmlName)
-	return passer
-	
-@app.route("/clicker/<int:roomNumber>/<int:accNumber>/")
-@crossdomain(origin='*')
-def tick(roomNumber, accNumber):
-	
-	if len(outPin[roomNumber]) != 0:
-		state= 1 - GPIO.input(outPin[roomNumber][accNumber])
-		GPIO.output(outPin[roomNumber][accNumber], state)
-		#subprocess.call(['./echo.sh'], shell=True)
-	else:
-		#for handling empty rooms for other rooms
-		subprocess.call(['./echo.sh'], shell=True)
-		
-	#print(roomNumber, accNumber)
-	buttonHtmlName = accName[roomNumber][accNumber].replace(" ", "<br>")
-	passer="<button class='%s' onclick='tick(%d,%d)'>%s</button>" % ("containerOff", roomNumber, accNumber, buttonHtmlName)
 	return passer
 
 def gen(camera):
@@ -245,8 +227,7 @@ def video_feed():
 if __name__ == "__main__":
 	if secure is True:
 		#app.run(host='0.0.0.0', port=8000, debug=True, ssl_context=('WebGPIO.cer', 'WebGPIO.key'))
-		socketio.run(app, debug=True)
+		socketio.run(app,host='0.0.0.0',debug=True)
 	else:
 		#app.run(host='0.0.0.0', port=8000, debug=True)
-		socketio.run(app, debug=False)
-
+		socketio.run(app,host='0.0.0.0',debug=False)

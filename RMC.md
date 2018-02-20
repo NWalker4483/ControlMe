@@ -17,10 +17,11 @@ Steps of progression
 * Switch control to an Arduino 
 * <del>Connect webcam to servo </del> which is controlled via gamepad
 * Test the bandwidth utilized by the stream
-
+* seperate javascript and css into seperate files
 # References/Tutorials
 * https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page
 * https://github.com/miguelgrinberg/Flask-SocketIO
 * https://tutorials.technology/tutorials/61-Create-an-application-with-websockets-and-flask.html
 * https://forum.poppy-project.org/t/flask-quick-web-interface-for-robots/2217/6
+* https://stackoverflow.com/questions/22259847/application-not-picking-up-css-file-flask-python
 
