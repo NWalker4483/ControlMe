@@ -58,7 +58,7 @@ class Engine(Thread):
     def run(self):
         display = ''
         while True:
-            time.sleep(0.05)
+            time.sleep(0.1)
             #self.flow["Time"] = time.time()
             flowstr = str(self.flow)
             flowstr = flowstr.replace(',','<br>')
@@ -70,7 +70,7 @@ class Engine(Thread):
                           namespace='/test')
 secure= False
 Sliders=['Speed','Doggos']
-roomName = ['Rover', 'Server Room']
+roomName = ['Robot', 'Server Room']
 accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain']]
 outPin = [[7, 17, 27, 22],[27]]
 
