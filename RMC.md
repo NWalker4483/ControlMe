@@ -19,6 +19,7 @@ Steps of progression
 * Test the bandwidth utilized by the stream
 
 # References/Tutorials
-*
-*
+* https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page
+* https://github.com/miguelgrinberg/Flask-SocketIO
+* https://tutorials.technology/tutorials/61-Create-an-application-with-websockets-and-flask.html
 

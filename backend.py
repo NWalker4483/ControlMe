@@ -1,11 +1,19 @@
 from datetime import timedelta
 from functools import update_wrapper
 from flask import Flask, render_template, redirect, Markup, make_response, request, current_app, Response
+from flask_socketio import SocketIO, emit, join_room, leave_room, \
+    close_room, rooms, disconnect
 #import RPi.GPIO as GPIO
 import GPIO
 import subprocess, os, datetime, time, json
+#from pisces import ESC
+import random
+
+async_mode = None
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+socketio = SocketIO(app, async_mode=async_mode)
 secure= False
 
 roomName = ['Rover', 'Server Room','Speed']
@@ -64,29 +72,6 @@ def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_t
 		return update_wrapper(wrapped_function, f)
 	return decorator
 
-@app.route("/")
-def main():
-	now = datetime.datetime.now()
-	timeString = now.strftime("%Y-%m-%d %I:%M %p")
-
-	passer = ''
-	for i in range(len(roomName)):
-		passer = passer + "<p class='roomtitle'>%s</p>" % (roomName[i])
-		for j in range(len(accName[i])):
-			buttonHtmlName = accName[i][j].replace(" ", "<br>")
-			if i!=2:
-				passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
-			else:
-				passer = passer + "<span id='button%d%d'><button class='%s' onclick='tick(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
-			
-	buttonGrid = Markup(passer)
-	templateData = {
-		'title' : 'WebGPIO',
-		'time': timeString,
-		'buttons' : buttonGrid
-	}
-	return render_template('main.html', **templateData)
-
 @app.route("/grid/")
 @crossdomain(origin='*')
 
@@ -101,8 +86,29 @@ def grid():
 				passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
 			else:
 				passer = passer + "<span id='button%d%d'><button class='%s' onclick='tick(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
-			
 	return passer
+@app.route("/")
+def main():
+	now = datetime.datetime.now()
+	timeString = now.strftime("%Y-%m-%d %I:%M %p")
+	
+	passer = ''
+	for i in range(len(roomName)):
+		passer = passer + "<p class='roomtitle'>%s</p>" % (roomName[i])
+		for j in range(len(accName[i])):
+			buttonHtmlName = accName[i][j].replace(" ", "<br>")
+			if i!=2:
+				passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
+			else:
+				passer = passer + "<span id='button%d%d'><button class='%s' onclick='tick(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
+			
+	buttonGrid = Markup(passer)
+	templateData = {
+		'title' : 'MSU RMC Control Center',
+		'time': timeString,
+		'buttons' : buttonGrid,
+	}
+	return render_template('main.html', **templateData)
 
 @app.route("/statelist/")
 def buttonStates():
@@ -166,9 +172,16 @@ from camera import VideoCamera
 def video_feed():
     return Response(gen(VideoCamera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
+@socketio.on('my_event', namespace='/test')
+def test_message():
+    #session['receive_count'] = session.get('receive_count', 0) + 1
+    emit('my_response')
+
 if __name__ == "__main__":
 	if secure is True:
-		app.run(host='0.0.0.0', port=8000, debug=True, ssl_context=('WebGPIO.cer', 'WebGPIO.key'))
+		#app.run(host='0.0.0.0', port=8000, debug=True, ssl_context=('WebGPIO.cer', 'WebGPIO.key'))
+		socketio.run(app, debug=True)
 	else:
-		app.run(host='0.0.0.0', port=8000, debug=True)
+		#app.run(host='0.0.0.0', port=8000, debug=True)
+		socketio.run(app, debug=True)
 
