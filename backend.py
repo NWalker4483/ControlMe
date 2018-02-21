@@ -46,7 +46,7 @@ accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The 
 Buttpin = [[7, 17, 27, 22],[27]]
 
 global Tert
-Tert=ESC(17,calibrated=True)
+Tert=ESC(18)
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
