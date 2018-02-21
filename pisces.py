@@ -23,19 +23,19 @@ class ESC():
             self.update()
         else:
             print("Either no speed was given or given speed is either above or below the allowed range and has been set to minimum")
-            self.speed = min_value
+            self.speed = 0
         if calibrated == False:
             self.calibrate()
             
     def manual_drive(self): #You will use this function to program your ESC if required
-        print("You have selected manual option so give a value between 0 and {0} type 'stop' to exit").format(self.max_value)    
+        print("You have selected manual option so give a value between 0 and 100 type 'stop' to exit")  
         while True:
             inp = 0#raw_input()
             if inp == "stop":
                 self.stop()
                 break
             else:
-                pi.set_servo_pulsewidth(self.pin,inp)
+                self.update(inp)
                     
     def calibrate(self):   #This is the auto calibration procedure of a normal ESC
         self.update(0)
