@@ -6,7 +6,6 @@ import time   #importing time library to make Rpi wait because its impatient
 os.system ("sudo pigpiod") #Launching GPIO library
 time.sleep(1) # As i said it is impatient and so if this delay is removed you will get an error
 import pigpio #importing GPIO library
-from getch import getch
 import itertools
 import threading
 pi = pigpio.pi()
@@ -67,7 +66,7 @@ class ESC():
         # change your speed if you want to.... it should be between 700 - 2000
         print ("Controls x to stop - a to decrease speed & d to increase speed OR q to decrease a lot of speed & e to increase a lot of speed")
         while True:
-            inp = getch()
+            inp = input()
             if inp == "q":
                 self.speed -= 10   # decrementing the speed 
             elif inp == "e":    
