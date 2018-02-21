@@ -51,23 +51,24 @@ socketio = SocketIO(app, async_mode=async_mode)
 thread = None
 
 class Engine(Thread):
-    def __init__(self):
-        Thread.__init__(self)
-        self.flow = {}
-    
-    def run(self):
-        display = ''
-        while True:
-            time.sleep(0.1)
-            #self.flow["Time"] = time.time()
-            flowstr = str(self.flow)
-            flowstr = flowstr.replace(',','<br>')
-            flowstr = flowstr.replace('{','')
-            flowstr = flowstr.replace('}','')
-            flowstr = flowstr.replace("'",'')
-            socketio.emit('flow',
-                          {'data': flowstr},
-                          namespace='/test')
+	def __init__(self):
+		Thread.__init__(self)
+		self.flow = {}
+
+	def run(self):
+		display = ''
+		while True:
+			time.sleep(0.1)
+			#self.flow["Time"] = time.time()
+			for i in self.flow:
+				flowstr = str(self.flow[i])
+				flowstr = flowstr.replace('{','')
+				flowstr = flowstr.replace('}','')
+				flowstr = flowstr.replace("'",'')
+				socketio.emit('flow',
+							{'data':[i,flowstr]},
+							namespace='/test')
+				
 secure= False
 Sliders=['Speed','Doggos']
 slides=[[17],[]]
@@ -75,7 +76,8 @@ Buttname = ['Robot', 'Server Room']
 accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain']]
 Buttpin = [[7, 17, 27, 22],[27]]
 
-
+global Tert
+Tert=ESC(7)
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -140,8 +142,8 @@ def main():
 			buttonHtmlName = accName[i][j].replace(" ", "<br>")
 			passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
 	for i in range(len(Sliders)):
-		passer = passer + "<div><p class='roomtitle' id='%s'></p>" % (Sliders[i]+'a')
-		passer = passer + "	<input class='slider' id='%s' type='range' min='0' max='1' value='0.5' step='0.01'/> <br></div>" % (Sliders[i])
+		passer = passer + "<div><p class='roomtitle' id='%s'>%s: </p>" % (Sliders[i]+'a',Sliders[i])
+		passer = passer + "	<input class='slider' id='%s' type='range' min='0' max='100' value='50' step='1'/> <br></div>" % (Sliders[i])
 	buttonGrid = Markup(passer)
 	templateData = {
 		'title' : 'MSU RMC Control Center',
@@ -149,8 +151,7 @@ def main():
 		'buttons' : buttonGrid,
 	}
 	global thread
-	global Tert
-	Tert=ESC(7)
+	
 	#if thread is None:
 	thread = Engine()
 	thread.daemon = True
@@ -161,7 +162,7 @@ def main():
 def handle_robot(message):
 	thread.flow[message['motor']]=message['value']
 	if message['motor']=='Speed':
-		Tert.update(100*float(message['value']))
+		Tert.update(int(message['value']))
 
 							   
 @app.route("/button/<int:roomNumber>/<int:accNumber>/")
