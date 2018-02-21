@@ -3,13 +3,13 @@
 
 import os, sys   #importing os library so as to communicate with the system
 import time   #importing time library to make Rpi wait because its impatient 
-os.system ("sudo pigpiod") #Launching GPIO library
+#os.system ("sudo pigpiod") #Launching GPIO library
 time.sleep(1) # As i said it is impatient and so if this delay is removed you will get an error
-import pigpio #importing GPIO library
+#import pigpio #importing GPIO library
 from getch import getch
 import itertools
 import threading
-pi = pigpio.pi()
+#pi = pigpio.pi()
 
 class ESC():
     def __init__(self,pin,max_value = 2000,min_value = 700,speed=0,calibrated=False):
@@ -30,22 +30,22 @@ class ESC():
     def manual_drive(self): #You will use this function to program your ESC if required
         print("You have selected manual option so give a value between 0 and 100 type 'stop' to exit")  
         while True:
-            inp = 0#raw_input()
+            inp = input()
             if inp == "stop":
                 self.stop()
                 break
             else:
-                self.update(inp)
+                self.update(int(inp))
                     
     def calibrate(self):   #This is the auto calibration procedure of a normal ESC
         self.update(0)
         print("Disconnect the battery and press enter")
         self.Loading(1)
-        inp = 0#raw_input()
+        inp = input()
         if inp == '':
             self.update(100)
             print("Connect the battery NOW.. you will here two beeps, then wait for a gradual falling tone then press Enter")
-            inp = 0#raw_input()
+            inp = input()
             if inp == '':            
                 self.update(0)
                 print ("Special tone")
