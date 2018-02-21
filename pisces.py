@@ -98,7 +98,7 @@ class ESC():
         pi.stop()
     def update(self,_speed=None):
         _speed=self.speed if _speed==None else _speed
-        #pi.set_servo_pulsewidth(self.pin,self.ratio*_speed)
+        #pi.set_servo_pulsewidth(self.pin,self.min_value+(self.ratio*_speed)
         print(self.speed)
         self.speed=_speed
     def Loading(self,wait):

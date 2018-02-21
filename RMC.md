@@ -3,7 +3,7 @@
 * Python 3.6
 * * flask 
 * * imutils
-* 
+* Sockets.IO
 Steps of progression
 * <del>Install Raspbian OS on Pi</del>
 * <del>Setup & Test [WebGPIO](https://github.com/ThisIsQasim/WebGPIO)</del>

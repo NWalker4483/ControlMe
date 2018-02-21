@@ -12,6 +12,14 @@ body {
    color:#F7F7F7;
    text-align: center;
 }
+.time{
+      font-family:HelveticaNeue-UltraLight, Arial,sans-serif;
+      font-size:100%;
+      font-weight:100;
+      color:#F7F7F7;
+      text-align: center;
+      background-color: white;
+   }
 .containerOn{
    width:152px;
    height:152px;
