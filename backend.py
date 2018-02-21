@@ -13,9 +13,6 @@ import random
 from pisces import ESC
 from camera import VideoCamera
 
-
-
-
 async_mode = 'threading'
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -49,7 +46,7 @@ accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The 
 Buttpin = [[7, 17, 27, 22],[27]]
 
 global Tert
-Tert=ESC(17)
+Tert=ESC(17,calibrated=True)
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -61,7 +58,7 @@ def accState(roomNumber, accNumber):
 		return 'containerOn'
 	else:
 		return 'containerOff'
-
+'''
 def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):
 	if methods is not None:
 		methods = ', '.join(sorted(x.upper() for x in methods))
@@ -101,7 +98,7 @@ def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_t
 		f.provide_automatic_options = False
 		return update_wrapper(wrapped_function, f)
 	return decorator
-
+'''
 
 @app.route("/")
 def main():
@@ -136,7 +133,7 @@ def handle_robot(message):
 		Tert.update(int(message['value']))
 							   
 @app.route("/button/<int:roomNumber>/<int:accNumber>/")
-@crossdomain(origin='*')
+#@crossdomain(origin='*')
 def toggle(roomNumber, accNumber):
 	if len(Buttpin[roomNumber]) != 0:
 		state= 1 - GPIO.input(Buttpin[roomNumber][accNumber])
