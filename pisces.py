@@ -1,15 +1,15 @@
 # This program will let you test your ESC and brushless motor with a raspberry pi.
 # Modification by Nile Walker based on/inspired from ESC.py by AGT @instructable.com
 
-import os     #importing os library so as to communicate with the system
+import os, sys   #importing os library so as to communicate with the system
 import time   #importing time library to make Rpi wait because its impatient 
-#os.system ("sudo pigpiod") #Launching GPIO library
+os.system ("sudo pigpiod") #Launching GPIO library
 time.sleep(1) # As i said it is impatient and so if this delay is removed you will get an error
-#import pigpio #importing GPIO library
+import pigpio #importing GPIO library
 from getch import getch
 import itertools
 import threading
-#pi = pigpio.pi()
+pi = pigpio.pi()
 
 class ESC():
     def __init__(self,pin,max_value = 2000,min_value = 700,speed=0,calibrated=False):

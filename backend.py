@@ -12,35 +12,7 @@ from threading import Thread
 import random
 from pisces import ESC
 from camera import VideoCamera
-'''
-if async_mode is None:
-    try:
-        import eventlet
-        async_mode = 'eventlet'
-    except ImportError:
-        pass
 
-    if async_mode is None:
-        try:
-            from gevent import monkey
-            async_mode = 'gevent'
-        except ImportError:
-            pass
-
-    if async_mode is None:
-        async_mode = 'threading'
-
-    print('async_mode is ' + async_mode)
-
-# monkey patching is necessary because this application uses a background
-# thread
-if async_mode == 'eventlet':
-    import eventlet
-    eventlet.monkey_patch()
-elif async_mode == 'gevent':
-    from gevent import monkey
-    monkey.patch_all()
-	'''
 
 
 
@@ -77,7 +49,7 @@ accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The 
 Buttpin = [[7, 17, 27, 22],[27]]
 
 global Tert
-Tert=ESC(7)
+Tert=ESC(17)
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -151,7 +123,6 @@ def main():
 		'buttons' : buttonGrid,
 	}
 	global thread
-	
 	#if thread is None:
 	thread = Engine()
 	thread.daemon = True
@@ -163,7 +134,6 @@ def handle_robot(message):
 	thread.flow[message['motor']]=message['value']
 	if message['motor']=='Speed':
 		Tert.update(int(message['value']))
-
 							   
 @app.route("/button/<int:roomNumber>/<int:accNumber>/")
 @crossdomain(origin='*')
@@ -171,12 +141,9 @@ def toggle(roomNumber, accNumber):
 	if len(Buttpin[roomNumber]) != 0:
 		state= 1 - GPIO.input(Buttpin[roomNumber][accNumber])
 		GPIO.output(Buttpin[roomNumber][accNumber], state)
-		#subprocess.call(['./echo.sh'], shell=True)
-		pass
 	else:
 		#for handling empty rooms for other rooms
 		subprocess.call(['./echo.sh'], shell=True)
-	#print(roomNumber, accNumber)
 	buttonHtmlName = accName[roomNumber][accNumber].replace(" ", "<br>")
 	passer="<button class='%s' onclick='toggle(%d,%d)'>%s</button>" % (accState(roomNumber,accNumber), roomNumber, accNumber, buttonHtmlName)
 	return passer
