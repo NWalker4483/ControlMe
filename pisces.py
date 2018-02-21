@@ -107,7 +107,7 @@ class ESC():
             for c in itertools.cycle(['|', '/', '-', '\\']):
                 if done:
                     break
-                sys.stdout.write('\rself.Loading ' + c)
+                sys.stdout.write('\rLoading ' + c)
                 sys.stdout.flush()
                 time.sleep(0.1)
         t = threading.Thread(target=play,args=(wait,))
