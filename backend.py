@@ -2,8 +2,8 @@ from datetime import timedelta
 from functools import update_wrapper
 from flask import Flask, render_template,  Markup, make_response, request, current_app, Response
 from flask_socketio import SocketIO, emit
-#import RPi.GPIO as GPIO
-import GPIO
+import RPi.GPIO as GPIO
+#import GPIO
 import subprocess, os, datetime, time, json
 #from pisces import ESC
 import time

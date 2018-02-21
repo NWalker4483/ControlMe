@@ -64,3 +64,10 @@ def setstate(roomNumber, accNumber, state):
 		#action for other rooms
 		subprocess.call(['./echo.sh'], shell=True)
 	return "0"
+    
+				function process(event) {
+					var alpha = event.alpha;
+					var beta = event.beta;
+					var gamma = event.gamma;
+					socket.emit('pad', {alpha: alpha,beta: beta,gamma: gamma});
+				}
