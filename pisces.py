@@ -3,17 +3,20 @@
 
 import os     #importing os library so as to communicate with the system
 import time   #importing time library to make Rpi wait because its impatient 
-os.system ("sudo pigpiod") #Launching GPIO library
+#os.system ("sudo pigpiod") #Launching GPIO library
 time.sleep(1) # As i said it is impatient and so if this delay is removed you will get an error
-import pigpio #importing GPIO library
+#import pigpio #importing GPIO library
 from getch import getch
-pi = pigpio.pi()
+import itertools
+import threading
+#pi = pigpio.pi()
 
 class ESC():
     def __init__(self,pin,max_value = 2000,min_value = 700,speed=0,calibrated=False):
         self.pin=pin
         self.max_value=max_value
         self.min_value=min_value
+        self.ratio=(min_value-max_value)/100
         self.calibrated=calibrated
         if(min_value<=speed<=max_value):
             self.speed = speed
@@ -27,7 +30,7 @@ class ESC():
     def manual_drive(self): #You will use this function to program your ESC if required
         print("You have selected manual option so give a value between 0 and {0} type 'stop' to exit").format(self.max_value)    
         while True:
-            inp = raw_input()
+            inp = 0#raw_input()
             if inp == "stop":
                 self.stop()
                 break
@@ -35,44 +38,44 @@ class ESC():
                 pi.set_servo_pulsewidth(self.pin,inp)
                     
     def calibrate(self):   #This is the auto calibration procedure of a normal ESC
-        self.update(self.pin, 0)
+        self.update(0)
         print("Disconnect the battery and press enter")
-        Loading(1)
-        inp = raw_input()
+        self.Loading(1)
+        inp = 0#raw_input()
         if inp == '':
-            self.update(self.pin, self.max_value)
+            self.update(100)
             print("Connect the battery NOW.. you will here two beeps, then wait for a gradual falling tone then press Enter")
-            inp = raw_input()
+            inp = 0#raw_input()
             if inp == '':            
-                self.update(self.pin, self.min_value)
+                self.update(0)
                 print ("Special tone")
-                Loading(7)
+                self.Loading(7)
                 print ("Wait for it ....")
-                Loading(5)
+                self.Loading(5)
                 print ("Im working on it.....")
-                self.update(self.pin, 0)
-                Loading(2)
+                self.update(0)
+                self.Loading(2)
                 print ("Arming ESC now...")
-                self.update(self.pin, self.min_value)
+                self.update(0)
                 self.calibrated=True 
                 self.arm()
                 print ("ESC Calibrated and Armed")
                 
     def test_control(self): 
         print ("Starting the motor...")
-        Loading(1)
+        self.Loading(1)
         # change your speed if you want to.... it should be between 700 - 2000
         print ("Controls x to stop - a to decrease speed & d to increase speed OR q to decrease a lot of speed & e to increase a lot of speed")
         while True:
             inp = getch()
             if inp == "q":
-                self.speed -= 100    # decrementing the speed 
+                self.speed -= 10   # decrementing the speed 
             elif inp == "e":    
-                self.speed += 100    # incrementing the speed 
+                self.speed += 10    # incrementing the speed 
             elif inp == "d":
-                self.speed += 10     # incrementing the speed 
+                self.speed += 1    # incrementing the speed 
             elif inp == "a":
-                self.speed -= 10     # decrementing the speed
+                self.speed -= 1     # decrementing the speed
             elif inp == "x":
                 print("Stopping...")
                 self.stop()     #going for the stop function
@@ -82,26 +85,29 @@ class ESC():
             self.update()
             print ("speed = {0}".format(self.speed))
     def arm(self): #This is the arming procedure of an ESC 
-        self.update(self.pin, 0)
-        Loading(1)
-        self.update(self.pin, self.max_value)
-        Loading(1)
-        self.update(self.pin, self.min_value)
-        Loading(1)
+        self.update(0)
+        self.Loading(1)
+        self.update(100)
+        self.Loading(1)
+        self.update(0)
+        self.Loading(1)
         
     def stop(self): #This will stop every action your Pi is performing for ESC ofcourse.
-        self.update(self.pin, 0)
+        self.update(0)
         print("Stopping...")
         pi.stop()
-    def update(self,_speed=self.speed):
-        pi.set_servo_pulsewidth(self.pin,_speed)
-    def Loading(wait):
+    def update(self,_speed=None):
+        _speed=self.speed if _speed==None else _speed
+        #pi.set_servo_pulsewidth(self.pin,self.ratio*_speed)
+        print(self.speed)
+        self.speed=_speed
+    def Loading(self,wait):
         done = False 
         def play(_wait): 
             for c in itertools.cycle(['|', '/', '-', '\\']):
                 if done:
                     break
-                sys.stdout.write('\rLoading ' + c)
+                sys.stdout.write('\rself.Loading ' + c)
                 sys.stdout.flush()
                 time.sleep(0.1)
         t = threading.Thread(target=play,args=(wait,))

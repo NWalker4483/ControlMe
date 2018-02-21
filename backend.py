@@ -1,16 +1,18 @@
 from datetime import timedelta
 from functools import update_wrapper
-from flask import Flask, render_template, redirect, Markup, make_response, request, current_app, Response
-from flask_socketio import SocketIO, emit, join_room, leave_room, \
-    close_room, rooms, disconnect
+from flask import Flask, render_template,  Markup, make_response, request, current_app, Response
+from flask_socketio import SocketIO, emit
 #import RPi.GPIO as GPIO
 import GPIO
 import subprocess, os, datetime, time, json
 #from pisces import ESC
+import time
+from threading import Thread
+
 import random
-
-async_mode = 'threading'
-
+from pisces import ESC
+from camera import VideoCamera
+'''
 if async_mode is None:
     try:
         import eventlet
@@ -38,13 +40,11 @@ if async_mode == 'eventlet':
 elif async_mode == 'gevent':
     from gevent import monkey
     monkey.patch_all()
+	'''
 
-import time
-from threading import Thread
-from flask import Flask, render_template, url_for
-from flask_socketio import SocketIO, emit
-import csv
 
+
+async_mode = 'threading'
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app, async_mode=async_mode)
@@ -70,18 +70,20 @@ class Engine(Thread):
                           namespace='/test')
 secure= False
 Sliders=['Speed','Doggos']
-roomName = ['Robot', 'Server Room']
+slides=[[17],[]]
+Buttname = ['Robot', 'Server Room']
 accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain']]
-outPin = [[7, 17, 27, 22],[27]]
+Buttpin = [[7, 17, 27, 22],[27]]
+
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
-for i in range(len(outPin)):
-	GPIO.setup(outPin[i], GPIO.OUT, initial=GPIO.LOW)
+for i in range(len(Buttpin)):
+	GPIO.setup(Buttpin[i], GPIO.OUT, initial=GPIO.LOW)
 
 def accState(roomNumber, accNumber):
-	if GPIO.input(outPin[roomNumber][accNumber]) is 1:
+	if GPIO.input(Buttpin[roomNumber][accNumber]) is 1:
 		return 'containerOn'
 	else:
 		return 'containerOff'
@@ -126,26 +128,14 @@ def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_t
 		return update_wrapper(wrapped_function, f)
 	return decorator
 
-@app.route("/grid/")
-@crossdomain(origin='*')
-def grid():
-	#Safely Aligns all the Buttons
-	passer = ''
-	for i in range(len(roomName)):
-		passer = passer + "<p class='roomtitle'>%s</p>" % (roomName[i])
-		for j in range(len(accName[i])):
-			buttonHtmlName = accName[i][j].replace(" ", "<br>")
-			passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
-	return passer
-
 
 @app.route("/")
 def main():
 	now = datetime.datetime.now()
 	timeString = now.strftime("%Y-%m-%d %I:%M %p")
 	passer = ''
-	for i in range(len(roomName)):
-		passer = passer + "<p class='roomtitle'>%s</p>" % (roomName[i])
+	for i in range(len(Buttname)):
+		passer = passer + "<p class='roomtitle'>%s</p>" % (Buttname[i])
 		for j in range(len(accName[i])):
 			buttonHtmlName = accName[i][j].replace(" ", "<br>")
 			passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
@@ -159,6 +149,8 @@ def main():
 		'buttons' : buttonGrid,
 	}
 	global thread
+	global Tert
+	Tert=ESC(7)
 	#if thread is None:
 	thread = Engine()
 	thread.daemon = True
@@ -168,40 +160,16 @@ def main():
 @socketio.on('robot', namespace='/test')    
 def handle_robot(message):
 	thread.flow[message['motor']]=message['value']
-'''    
-@socketio.on('pad', namespace='/test')    
-def handle_pad(message):
-    thread.flow['alpha']=message['alpha']
-    thread.flow['beta']=message['beta']
-    thread.flow['gamma']=message['gamma']
-    '''
-@app.route("/statelist/")
-def buttonStates():
-	accState=[]
-	for i in range(len(outPin)):
-		accState.append([])
-		for j in range(len(outPin[i])):
-			accState[i].append(1 - GPIO.input(outPin[i][j]))
-	return json.dumps(accState)
-
-@app.route("/setstate/<int:roomNumber>/<int:accNumber>/<int:state>/")
-def setstate(roomNumber, accNumber, state):
-	if len(outPin[roomNumber]) == 1:
-		GPIO.output(outPin[roomNumber][accNumber], 1 - state)
-	#subprocess.call(['./echo.sh'], shell=True)
-	else:
-		#action for other rooms
-		subprocess.call(['./echo.sh'], shell=True)
-	return "0"
+	if message['motor']=='Speed':
+		Tert.update(100*float(message['value']))
 
 							   
 @app.route("/button/<int:roomNumber>/<int:accNumber>/")
 @crossdomain(origin='*')
-
 def toggle(roomNumber, accNumber):
-	if len(outPin[roomNumber]) != 0:
-		state= 1 - GPIO.input(outPin[roomNumber][accNumber])
-		GPIO.output(outPin[roomNumber][accNumber], state)
+	if len(Buttpin[roomNumber]) != 0:
+		state= 1 - GPIO.input(Buttpin[roomNumber][accNumber])
+		GPIO.output(Buttpin[roomNumber][accNumber], state)
 		#subprocess.call(['./echo.sh'], shell=True)
 		pass
 	else:
@@ -217,7 +185,6 @@ def gen(camera):
         frame = camera.get_frame()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-from camera import VideoCamera
 
 @app.route('/video_feed')
 def video_feed():
