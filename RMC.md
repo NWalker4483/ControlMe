@@ -14,7 +14,9 @@ Steps of progression
 * * <del>LED</del>
 * * ESC 
 * * Mosfet 
-* Switch control to an Arduino 
+* Switch control to an Arduino [Roboteq](https://github.com/kippandrew/Arduino-RobotEQ)
+* [Control Linear Actuator](https://www.marginallyclever.com/2015/07/how-to-control-a-linear-actuator-with-an-arduino/) with Arduino
+
 * <del>Connect webcam to servo </del> which is controlled via gamepad
 * Test the bandwidth utilized by the stream
 * seperate javascript and css into seperate files
