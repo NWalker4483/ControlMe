@@ -45,6 +45,9 @@ body {
    margin: auto 4px 12px 4px;
    vertical-align: middle;
 }
+#stream {
+      max-width: 70%; /* Width of the stream container */
+      }
 .slidecontainer {
 width: 100%; /* Width of the outside container */
 }

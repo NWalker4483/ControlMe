@@ -33,7 +33,7 @@
 
    <body style="background-color:#000000">
        <div align="center">
-			<img width=75% height=300px id="bg" src="{{ url_for('video_feed') }}">
+			<img id='stream' src="{{ url_for('video_feed') }}">
 			{{ buttons|safe }}
     </div>
 	   <script>function toggle(r,a) {

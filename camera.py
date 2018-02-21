@@ -33,3 +33,4 @@ class VideoCamera(object):
             lineType)
         ret, jpeg = cv2.imencode('.jpg', image)
         return jpeg.tobytes()
+        

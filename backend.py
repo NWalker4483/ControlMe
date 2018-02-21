@@ -1,15 +1,12 @@
-from datetime import timedelta
-from functools import update_wrapper
+#from datetime import timedelta
+#from functools import update_wrapper
 from flask import Flask, render_template,  Markup, make_response, request, current_app, Response
 from flask_socketio import SocketIO, emit
-import RPi.GPIO as GPIO
-#import GPIO
+#import RPi.GPIO as GPIO
+import GPIO
 import subprocess, os, datetime, time, json
-#from pisces import ESC
 import time
 from threading import Thread
-
-import random
 from pisces import ESC
 from camera import VideoCamera
 
@@ -40,13 +37,13 @@ class Engine(Thread):
 				
 secure= False
 Sliders=['Speed','Doggos']
-slides=[[17],[]]
+slides=[[18],[]]
 Buttname = ['Robot', 'Server Room']
 accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain']]
 Buttpin = [[7, 17, 27, 22],[27]]
 
-global Tert
-Tert=ESC(18)
+global M1
+M1=ESC(18,calibrated=True)
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -58,47 +55,6 @@ def accState(roomNumber, accNumber):
 		return 'containerOn'
 	else:
 		return 'containerOff'
-'''
-def crossdomain(origin=None, methods=None, headers=None, max_age=21600, attach_to_all=True, automatic_options=True):
-	if methods is not None:
-		methods = ', '.join(sorted(x.upper() for x in methods))
-	if headers is not None and not isinstance(headers, list):
-		headers = ', '.join(x.upper() for x in headers)
-	if not isinstance(origin, list):
-		origin = ', '.join(origin)
-	if isinstance(max_age, timedelta):
-		max_age = max_age.total_seconds()
-	
-	def get_methods():
-		if methods is not None:
-			return methods
-		
-		options_resp = current_app.make_default_options_response()
-		return options_resp.headers['allow']
-	
-	def decorator(f):
-		def wrapped_function(*args, **kwargs):
-			if automatic_options and request.method == 'OPTIONS':
-				resp = current_app.make_default_options_response()
-			else:
-				resp = make_response(f(*args, **kwargs))
-			if not attach_to_all and request.method != 'OPTIONS':
-				return resp
-			
-			h = resp.headers
-			h['Access-Control-Allow-Origin'] = origin
-			h['Access-Control-Allow-Methods'] = get_methods()
-			h['Access-Control-Max-Age'] = str(max_age)
-			h['Access-Control-Allow-Credentials'] = 'true'
-			h['Access-Control-Allow-Headers'] = "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-			if headers is not None:
-				h['Access-Control-Allow-Headers'] = headers
-			return resp
-						
-		f.provide_automatic_options = False
-		return update_wrapper(wrapped_function, f)
-	return decorator
-'''
 
 @app.route("/")
 def main():
@@ -130,10 +86,10 @@ def main():
 def handle_robot(message):
 	thread.flow[message['motor']]=message['value']
 	if message['motor']=='Speed':
-		Tert.update(int(message['value']))
+		M1.update(int(message['value']))
 							   
 @app.route("/button/<int:roomNumber>/<int:accNumber>/")
-#@crossdomain(origin='*')
+
 def toggle(roomNumber, accNumber):
 	if len(Buttpin[roomNumber]) != 0:
 		state= 1 - GPIO.input(Buttpin[roomNumber][accNumber])
