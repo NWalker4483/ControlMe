@@ -2,8 +2,8 @@
 #from functools import update_wrapper
 from flask import Flask, render_template,  Markup, make_response, request, current_app, Response
 from flask_socketio import SocketIO, emit
-#import RPi.GPIO as GPIO
-import GPIO
+import RPi.GPIO as GPIO
+#import GPIO
 import subprocess, os, datetime, time, json
 import time
 from threading import Thread
@@ -43,7 +43,7 @@ accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The 
 Buttpin = [[7, 17, 27, 22],[27]]
 
 global M1
-M1=ESC(18,calibrated=True)
+M1=ESC(18)
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
