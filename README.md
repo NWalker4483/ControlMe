@@ -6,6 +6,7 @@
 * imutils
 * flask_socketio
 * RPi.GPIO
+* getch
 
 ## Steps of progression
 * <del>Install Raspbian OS on Pi</del>

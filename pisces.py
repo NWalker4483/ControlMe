@@ -3,7 +3,10 @@
 
 import os, sys   #importing os library so as to communicate with the system
 import time   #importing time library to make Rpi wait because its impatient 
-os.system ("sudo pigpiod") #Launching GPIO library
+os.system ("sudo killall pigpiod")
+os.system ("sudo pigpiod")
+ #Launching GPIO library
+ 
 time.sleep(1) # As i said it is impatient and so if this delay is removed you will get an error
 import pigpio #importing GPIO library
 import itertools
@@ -15,7 +18,7 @@ class ESC():
         self.pin=pin
         self.max_value=max_value
         self.min_value=min_value
-        self.ratio=(min_value-max_value)/100
+        self.ratio=abs((max_value-min_value))/100
         self.calibrated=calibrated
         if(min_value<=speed<=max_value):
             self.speed = speed
@@ -96,10 +99,9 @@ class ESC():
         print("Stopping...")
         pi.stop()
     def update(self,_speed=None):
-        _speed=self.speed if _speed==None else _speed
-        pi.set_servo_pulsewidth(self.pin,self.min_value+(self.ratio*_speed)
+        _speed=self.min_value if _speed==None else _speed
+        pi.set_servo_pulsewidth(self.pin,int(self.min_value+(self.ratio*_speed)))
         self.speed=_speed
-        print(self.speed)
     def Loading(self,wait):
         done = False 
         def play(_wait): 
