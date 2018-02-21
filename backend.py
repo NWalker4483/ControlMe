@@ -115,7 +115,7 @@ def video_feed():
 if __name__ == "__main__":
 	if secure is True:
 		#app.run(host='0.0.0.0', port=8000, debug=True, ssl_context=('WebGPIO.cer', 'WebGPIO.key'))
-		socketio.run(app,host='0.0.0.0',debug=True)
+		socketio.run(app,host='0.0.0.0',debug=True,threaded=True)
 	else:
 		#app.run(host='0.0.0.0', port=8000, debug=True)
-		socketio.run(app,host='0.0.0.0',debug=False)
+		socketio.run(app,host='0.0.0.0',debug=False,threaded=True)
