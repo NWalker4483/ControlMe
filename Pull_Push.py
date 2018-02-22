@@ -8,9 +8,14 @@
 * jrk grnd connected to arduino ground
 */
 import serial
-class Linear_Actuator()'/dev/ttyACM0'
-    def __init__(target,path='/dev/ttyACM0'):
-        self.target=target
-        self.path=serial.Serial(path) 
+class Linear_Actuator():
+    def __init__(path="/dev/ttyACM0"):
+        self.path=serial.Serial(port=path) 
     def move(self,goal):
         self.path.write(("#"+goal).encode('utf-8'))
+
+if __name__=="__main__":
+test=Linear_Actuator('/dev/ttyACM0')
+    while True:
+        test.move(int(input()))
+    test.path.close()
