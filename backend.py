@@ -8,6 +8,7 @@ import subprocess, os, datetime, time, json
 import time
 from threading import Thread
 from pisces import ESC
+from Pull_Push import Linear_Actuator
 from camera import VideoCamera
 
 async_mode = 'threading'
@@ -36,14 +37,15 @@ class Engine(Thread):
 							namespace='/test')
 				
 secure= False
-Sliders=['Speed','Doggos']
+Sliders=['Speed','Arm']
 slides=[[18],[]]
 Buttname = ['Robot', 'Server Room']
 accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain']]
 Buttpin = [[7, 17, 27, 22],[27]]
 
-global M1
+global M1 , M2
 M1=ESC(18)
+M2=Linear_Actuator()
 GPIO.setmode(GPIO.BCM)
 GPIO.setwarnings(False)
 
@@ -87,6 +89,9 @@ def handle_robot(message):
 	thread.flow[message['motor']]=message['value']
 	if message['motor']=='Speed':
 		M1.update(int(message['value']))
+	if message['motor']=='Arm':
+		M2.move(int(message['value']))
+		
 							   
 @app.route("/button/<int:roomNumber>/<int:accNumber>/")
 
