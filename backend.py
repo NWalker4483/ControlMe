@@ -70,7 +70,7 @@ def main():
 			passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
 	for i in range(len(Sliders)):
 		passer = passer + "<div><p class='roomtitle' id='%s'>%s: </p>" % (Sliders[i]+'a',Sliders[i])
-		passer = passer + "	<input class='slider' id='%s' type='range' min='0' max='100' value='50' step='1'/> <br></div>" % (Sliders[i])
+		passer = passer + "	<input class='slider' id='%s' type='range' min='0' max='100' value='50' step='10'/> <br></div>" % (Sliders[i])
 	buttonGrid = Markup(passer)
 	templateData = {
 		'title' : 'MSU RMC Control Center',
