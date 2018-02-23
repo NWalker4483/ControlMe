@@ -64,8 +64,8 @@ void loop()
    delay(10);
    
    // If the marker's found, next 4 characters are the position
-   if (inByte == '#A') {
-     while (pointer < 4) { // accumulate 4 chars
+    if (inByte == '#') {
+      while (pointer < 4) { // accumulate 4 chars
         buffer[pointer] = Serial.read(); // store in the buffer
         pointer++; // move the pointer forward by 1
       }
@@ -73,7 +73,7 @@ void loop()
       //translating into an int
       myTarget=(buffer[0]-48)*1000+(buffer[1]-48)*100+(buffer[2]-48)*10+(buffer[3]-48);
       pointer =0;
-   }
+    }
    
     
    //makes sure the target is within the bounds

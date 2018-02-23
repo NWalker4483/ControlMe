@@ -18,16 +18,16 @@
 * * <del>LED</del>
 * * <del>ESC</del> 
 * * Mosfet 
-* [Signal Arduino with Pi](https://maker.pro/education/how-to-connect-and-interface-a-raspberry-pi-with-an-arduino) 
-* Switch control to an Arduino [Roboteq](https://github.com/kippandrew/Arduino-RobotEQ)
-* [Control Linear Actuator](https://www.marginallyclever.com/2015/07/how-to-control-a-linear-actuator-with-an-arduino/) with Arduino
-
+* <del>[Signal Arduino with Pi](https://maker.pro/education/how-to-connect-and-interface-a-raspberry-pi-with-an-arduino) </del>
+* <del>Switch control to an Arduino [Roboteq](https://github.com/kippandrew/Arduino-RobotEQ)</del>
+* <del>[Control Linear Actuator](https://www.marginallyclever.com/2015/07/how-to-control-a-linear-actuator-with-an-arduino/) with Arduino</del>
 * <del>Connect webcam to servo </del> which is controlled via gamepad
 * Test the bandwidth utilized by the stream
-* seperate javascript and css into seperate files
+* seperate javascript and <del>css</del> into seperate files
 ## Necessary Side Quests
 * Slim down modules used/ Remove importing of any unused/noncritical modules
 * Review line 33 and 36 in order to implement control of multiple actuators from arduino
+* Wipe Pi and reinstall backend while logging the setup process 
 ## Possible Progression
 * Convert to C++ using [Crow](https://github.com/ipkn/crow)
 * Convert Camera module to imutils instead of cv2

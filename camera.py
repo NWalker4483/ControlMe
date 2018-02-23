@@ -25,6 +25,7 @@ class VideoCamera(object):
         fontScale              = 1
         fontColor              = (255,255,255)
         lineType               = 2
+        #Add timestamp to frame
         cv2.putText(image,("{0}".format(datetime.datetime.fromtimestamp(time.time()).strftime('%Y_%m_%d-%H:%M:%S'))), 
             bottomLeftCornerOfText, 
             font, 
