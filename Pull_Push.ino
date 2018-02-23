@@ -29,6 +29,7 @@ void announcePos(int (position)) {
 } 
 
 //sets the new target for the JRK21V3 controller, this uses pololu high resulution protocal
+//The Delay Bug is somewhere in this Move Function 
 void Move(int x) {
   word target = x;  //only pass this ints, i tried doing math in this and the remainder error screwed something up
   mySerial.write(0xAA); //tells the controller we're starting to send it commands
@@ -53,7 +54,6 @@ void setup()
 }
 
     
-
 void loop()
 {
 
@@ -64,9 +64,7 @@ void loop()
    delay(10);
    
    // If the marker's found, next 4 characters are the position
-   if (inByte == '#') {
-   
-
+   if (inByte == '#A') {
      while (pointer < 4) { // accumulate 4 chars
         buffer[pointer] = Serial.read(); // store in the buffer
         pointer++; // move the pointer forward by 1

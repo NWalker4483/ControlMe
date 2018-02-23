@@ -16,7 +16,7 @@
 * <del> Setup Video Stream from webcam </del>
 * Control ___ with the webpage and or gamepad input:
 * * <del>LED</del>
-* * ESC 
+* * <del>ESC</del> 
 * * Mosfet 
 * [Signal Arduino with Pi](https://maker.pro/education/how-to-connect-and-interface-a-raspberry-pi-with-an-arduino) 
 * Switch control to an Arduino [Roboteq](https://github.com/kippandrew/Arduino-RobotEQ)
@@ -27,6 +27,7 @@
 * seperate javascript and css into seperate files
 ## Necessary Side Quests
 * Slim down modules used/ Remove importing of any unused/noncritical modules
+* Review line 33 and 36 in order to implement control of multiple actuators from arduino
 ## Possible Progression
 * Convert to C++ using [Crow](https://github.com/ipkn/crow)
 * Convert Camera module to imutils instead of cv2
@@ -38,3 +39,4 @@
 * https://stackoverflow.com/questions/22259847/application-not-picking-up-css-file-flask-python
 * [Motor control setup for pololu jrk21v3 with Arduino UNO R3](https://forum.arduino.cc/index.php?topic=146784.0)
 * [CrossDomain](http://flask.pocoo.org/snippets/56/)
+* [Multiple Arduino Streams](https://www.arduino.cc/en/Tutorial/TwoPortRece)
