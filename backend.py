@@ -2,13 +2,18 @@
 #from functools import update_wrapper
 from flask import Flask, render_template,  Markup, make_response, request, current_app, Response
 from flask_socketio import SocketIO, emit
-#import RPi.GPIO as GPIO
-import GPIO
 import subprocess, os, datetime, time, json
 import time
 from threading import Thread
-from pisces import ESC
-from Pull_Push import Linear_Actuator
+
+try:
+	import RPi.GPIO as GPIO
+
+	test_environment = False
+except ImportError:
+	test_environment = True
+
+
 from camera import VideoCamera
 
 async_mode = 'threading'
@@ -42,15 +47,16 @@ slides=[[18],[]]
 Buttname = ['Robot', 'Server Room']
 accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain']]
 Buttpin = [[7, 17, 27, 22],[27]]
-
-global M1 , M2
-M1=ESC(18)
-M2=Linear_Actuator()
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-
-for i in range(len(Buttpin)):
-	GPIO.setup(Buttpin[i], GPIO.OUT, initial=GPIO.LOW)
+if test_environment==False:
+	from pisces import ESC
+	from Pull_Push import Linear_Actuator
+	global M1 , M2
+	M1=ESC(18)
+	M2=Linear_Actuator()
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setwarnings(False)
+	for i in range(len(Buttpin)):
+		GPIO.setup(Buttpin[i], GPIO.OUT, initial=GPIO.LOW)
 
 def accState(roomNumber, accNumber):
 	if GPIO.input(Buttpin[roomNumber][accNumber]) is 1:
@@ -68,6 +74,7 @@ def main():
 		for j in range(len(accName[i])):
 			buttonHtmlName = accName[i][j].replace(" ", "<br>")
 			passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
+	
 	for i in range(len(Sliders)):
 		passer = passer + "<div><p class='roomtitle' id='%s'>%s: </p>" % (Sliders[i]+'a',Sliders[i])
 		passer = passer + "	<input class='slider' id='%s' type='range' min='0' max='100' value='50' step='10'/> <br></div>" % (Sliders[i])
@@ -76,6 +83,7 @@ def main():
 		'title' : 'MSU RMC Control Center',
 		'time': timeString,
 		'buttons' : buttonGrid,
+		'sliders' : sliderGrid
 	}
 	global thread
 	#if thread is None:
@@ -87,14 +95,14 @@ def main():
 @socketio.on('robot', namespace='/test')    
 def handle_robot(message):
 	thread.flow[message['motor']]=message['value']
-	if message['motor']=='Speed':
-		M1.update(int(message['value']))
-	if message['motor']=='Arm':
-		M2.move(int(message['value']))
-		
+	if test_environment==False:
+		if message['motor']=='Speed':
+			M1.update(int(message['value']))
+		if message['motor']=='Arm':
+			M2.move(int(message['value']))
+	
 							   
 @app.route("/button/<int:roomNumber>/<int:accNumber>/")
-
 def toggle(roomNumber, accNumber):
 	if len(Buttpin[roomNumber]) != 0:
 		state= 1 - GPIO.input(Buttpin[roomNumber][accNumber])

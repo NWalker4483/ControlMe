@@ -28,9 +28,12 @@
 * Slim down modules used/ Remove importing of any unused/noncritical modules
 * Review line 33 and 36 in order to implement control of multiple actuators from arduino
 * Wipe Pi and reinstall backend while logging the setup process 
+* Check out[PS2 Controller with jrk21v3](https://arduino.stackexchange.com/questions/17301/linear-actuator-jitters-vibrates-when-getting-pwm-from-arduino-mega-2560-through)
 ## Possible Progression
 * Convert to C++ using [Crow](https://github.com/ipkn/crow)
 * Convert Camera module to imutils instead of cv2
+* Have backend print ip address on boot.
+* Add PC Mode that ignores gpio
 # References/Tutorials
 * https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page
 * https://github.com/miguelgrinberg/Flask-SocketIO

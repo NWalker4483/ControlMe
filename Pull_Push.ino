@@ -22,7 +22,7 @@ byte inByte = 0;
 
 
 // announcer for PC Serial output
-void announcePos(int (position)) {
+void announcePos(int(position)) {
   Serial.print("positiion set to ");
   Serial.println(position);
   Serial.flush();
