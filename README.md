@@ -23,17 +23,19 @@
 * <del>[Control Linear Actuator](https://www.marginallyclever.com/2015/07/how-to-control-a-linear-actuator-with-an-arduino/) with Arduino</del>
 * <del>Connect webcam to servo </del> which is controlled via gamepad
 * Test the bandwidth utilized by the stream
-* seperate javascript and <del>css</del> into seperate files
+
 ## Necessary Side Quests
 * Slim down modules used/ Remove importing of any unused/noncritical modules
 * Review line 33 and 36 in order to implement control of multiple actuators from arduino
 * Wipe Pi and reinstall backend while logging the setup process 
 * Check out[PS2 Controller with jrk21v3](https://arduino.stackexchange.com/questions/17301/linear-actuator-jitters-vibrates-when-getting-pwm-from-arduino-mega-2560-through)
+* [Pololu jrk 21v3 Documentation](https://www.pololu.com/docs/pdf/0J38/jrk_motor_controller.pdf) Page 29
 ## Possible Progression
+* * seperate javascript and <del>css</del> into seperate files
 * Convert to C++ using [Crow](https://github.com/ipkn/crow)
 * Convert Camera module to imutils instead of cv2
 * Have backend print ip address on boot.
-* Add PC Mode that ignores gpio
+* <del>Add PC Mode that ignores gpio</del>
 # References/Tutorials
 * https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page
 * https://github.com/miguelgrinberg/Flask-SocketIO
@@ -43,3 +45,4 @@
 * [Motor control setup for pololu jrk21v3 with Arduino UNO R3](https://forum.arduino.cc/index.php?topic=146784.0)
 * [CrossDomain](http://flask.pocoo.org/snippets/56/)
 * [Multiple Arduino Streams](https://www.arduino.cc/en/Tutorial/TwoPortRece)
+* [Jrk21v3 with feedback Arduino](https://forum.pololu.com/t/getting-feedback-from-jrk21v3-with-arduino/8823/6)

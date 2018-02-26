@@ -12,8 +12,6 @@ try:
 	test_environment = False
 except ImportError:
 	test_environment = True
-
-
 from camera import VideoCamera
 
 async_mode = 'threading'
@@ -83,7 +81,7 @@ def main():
 		'title' : 'MSU RMC Control Center',
 		'time': timeString,
 		'buttons' : buttonGrid,
-		'sliders' : sliderGrid
+		'sliders' : None
 	}
 	global thread
 	#if thread is None:
