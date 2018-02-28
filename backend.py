@@ -5,14 +5,15 @@ from flask_socketio import SocketIO, emit
 import subprocess, os, datetime, time, json
 import time
 from threading import Thread
-
+import cv2
+from imutils.video import VideoStream
+test_environment = True
 try:
 	import RPi.GPIO as GPIO
-
 	test_environment = False
 except ImportError:
-	test_environment = True
-from camera import VideoCamera
+	pass
+
 
 async_mode = 'threading'
 app = Flask(__name__)
@@ -57,10 +58,13 @@ if test_environment==False:
 		GPIO.setup(Buttpin[i], GPIO.OUT, initial=GPIO.LOW)
 
 def accState(roomNumber, accNumber):
-	if GPIO.input(Buttpin[roomNumber][accNumber]) is 1:
-		return 'containerOn'
+	if test_environment==False:	
+		if GPIO.input(Buttpin[roomNumber][accNumber]) is 1:
+			return 'containerOn'
+		else:
+			return 'containerOff'
 	else:
-		return 'containerOff'
+		return 'containerOn'
 
 @app.route("/")
 def main():
@@ -99,28 +103,31 @@ def handle_robot(message):
 		if message['motor']=='Arm':
 			M2.move(int(message['value']))
 	
-							   
-@app.route("/button/<int:roomNumber>/<int:accNumber>/")
-def toggle(roomNumber, accNumber):
-	if len(Buttpin[roomNumber]) != 0:
-		state= 1 - GPIO.input(Buttpin[roomNumber][accNumber])
-		GPIO.output(Buttpin[roomNumber][accNumber], state)
-	else:
-		#for handling empty rooms for other rooms
-		subprocess.call(['./echo.sh'], shell=True)
-	buttonHtmlName = accName[roomNumber][accNumber].replace(" ", "<br>")
-	passer="<button class='%s' onclick='toggle(%d,%d)'>%s</button>" % (accState(roomNumber,accNumber), roomNumber, accNumber, buttonHtmlName)
-	return passer
+if test_environment==False:							   
+	@app.route("/button/<int:roomNumber>/<int:accNumber>/")
+	def toggle(roomNumber, accNumber):
+		if len(Buttpin[roomNumber]) != 0:
+			state= 1 - GPIO.input(Buttpin[roomNumber][accNumber])
+			GPIO.output(Buttpin[roomNumber][accNumber], state)
+		else:
+			#for handling empty rooms for other rooms
+			subprocess.call(['./echo.sh'], shell=True)
+		buttonHtmlName = accName[roomNumber][accNumber].replace(" ", "<br>")
+		passer="<button class='%s' onclick='toggle(%d,%d)'>%s</button>" % (accState(roomNumber,accNumber), roomNumber, accNumber, buttonHtmlName)
+		return passer
 
 def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+	camera.start()
+	while True:
+		frame = camera.read()
+		ret, jpeg = cv2.imencode('.jpg', frame)
+		frame=jpeg.tobytes()
+		yield (b'--frame\r\n'
+			b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(gen(VideoCamera()),
+    return Response(gen(VideoStream(0,resolution=(320, 240),framerate=32)),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":

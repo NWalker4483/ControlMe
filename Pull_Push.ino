@@ -32,14 +32,13 @@ void announcePos(int(position)) {
 //The Delay Bug is somewhere in this Move Function 
 void Move(int x) {
   word target = x;  //only pass this ints, i tried doing math in this and the remainder error screwed something up
-  mySerial.write(0xAA); //tells the controller we're starting to send it commands
+  //Line below may not be totally necessary
+  mySerial.write(0xAA); //The baud rate on TX and RX can either be automatically detected by the jrk when a 0xAA byte is received on RX
+  //tells the controller we're starting to send it commands
   mySerial.write(0xB);   //This is the pololu device # you're connected too that is found in the config utility(converted to hex). I'm using #11 in this example
   mySerial.write(0x40 + (target & 0x1F)); //first half of the target, see the pololu jrk manual for more specifics
   mySerial.write((target >> 5) & 0x7F);   //second half of the target, " " " 
 }  
-
-
-
 
 void setup()
 {
@@ -52,14 +51,10 @@ void setup()
   Serial.println("Enter '#' and 4 digit position level (#0000-#4095)");
 
 }
-
-    
 void loop()
 {
-
   if (Serial.available() >0) {
    // read the incoming byte:
-   
    inByte = Serial.read();
    delay(10);
    
@@ -74,8 +69,6 @@ void loop()
       myTarget=(buffer[0]-48)*1000+(buffer[1]-48)*100+(buffer[2]-48)*10+(buffer[3]-48);
       pointer =0;
     }
-   
-    
    //makes sure the target is within the bounds
    if (myTarget < 0){
       myTarget = 0;

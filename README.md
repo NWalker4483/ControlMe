@@ -35,6 +35,7 @@
 * Convert to C++ using [Crow](https://github.com/ipkn/crow)
 * Convert Camera module to imutils instead of cv2
 * Have backend print ip address on boot.
+* Switch Jrk Input Mode to PWM 
 * <del>Add PC Mode that ignores gpio</del>
 # References/Tutorials
 * https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page
