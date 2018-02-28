@@ -83,6 +83,7 @@ void loop()
 
   } 
 }
+
 /*So my problem was that I didn't set in Pololu Jrk Configuration Utility, Serial interface to "UART, fixed baud rate to 9600", I had it set to "USB Dual Port" 
 
 Thank you so much for your help.

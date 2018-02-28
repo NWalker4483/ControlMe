@@ -5,15 +5,13 @@ from flask_socketio import SocketIO, emit
 import subprocess, os, datetime, time, json
 import time
 from threading import Thread
-import cv2
-from imutils.video import VideoStream
 test_environment = True
 try:
 	import RPi.GPIO as GPIO
 	test_environment = False
 except ImportError:
 	pass
-
+from camera import VideoCamera
 
 async_mode = 'threading'
 app = Flask(__name__)
@@ -117,17 +115,14 @@ if test_environment==False:
 		return passer
 
 def gen(camera):
-	camera.start()
-	while True:
-		frame = camera.read()
-		ret, jpeg = cv2.imencode('.jpg', frame)
-		frame=jpeg.tobytes()
-		yield (b'--frame\r\n'
-			b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(gen(VideoStream(0,resolution=(320, 240),framerate=32)),
+    return Response(gen(VideoCamera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == "__main__":

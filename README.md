@@ -7,6 +7,7 @@
 * flask_socketio
 * RPi.GPIO
 * getch
+* cv2
 
 ## Steps of progression
 * <del>Install Raspbian OS on Pi</del>
@@ -23,7 +24,7 @@
 * <del>[Control Linear Actuator](https://www.marginallyclever.com/2015/07/how-to-control-a-linear-actuator-with-an-arduino/) with Arduino</del>
 * <del>Connect webcam to servo </del> which is controlled via gamepad
 * Test the bandwidth utilized by the stream
-
+* Switch Jrk Mode from serial to pwm
 ## Necessary Side Quests
 * Slim down modules used/ Remove importing of any unused/noncritical modules
 * Review line 33 and 36 in order to implement control of multiple actuators from arduino
@@ -37,6 +38,11 @@
 * Have backend print ip address on boot.
 * Switch Jrk Input Mode to PWM 
 * <del>Add PC Mode that ignores gpio</del>
+* ## [Replicate]
+* * (https://www.youtube.com/watch?v=0Pagiqov-dk)
+* * (https://www.youtube.com/watch?v=L5tx64G1ilQ&t=4s)
+* * (https://arduino.stackexchange.com/questions/17301/linear-actuator-jitters-vibrates-when-getting-pwm-from-arduino-mega-2560-through)
+* * (https://www.arduino.cc/en/Tutorial/Knob)
 # References/Tutorials
 * https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page
 * https://github.com/miguelgrinberg/Flask-SocketIO
