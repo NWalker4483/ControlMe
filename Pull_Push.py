@@ -5,11 +5,11 @@ class Linear_Actuator():
         self.ratio=255/100
         self.lets=lets
         self.path=serial.Serial(port=path) 
-    def move(self,dir='FORWARD',goal):
-        self.path.write((self.lets+" "+ dir +" "+str(int(goal*self.ratio)).encode('utf-8')))
+    def move(self,dir='F',goal):
+        self.path.write((self.lets+ + dir +str(int(goal*self.ratio)).encode('utf-8')))
 
 if __name__=="__main__":
     test=Linear_Actuator()
     while True:
-        test.move(int(input()))
+        test.move(int(input()),255)
     test.path.close()

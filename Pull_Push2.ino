@@ -11,7 +11,7 @@ int read_num(int numberOfDigits){
   int theNumber;
   for (int i = 0; i < numberOfDigits; theNumberString[i++] = Serial.read());
   theNumberString[numberOfDigits] = 0x00;
-  theNumber = atoi(theNumberString);
+  theNumber =   (theNumberString);
   return theNumber;
 }
 void setup() {
@@ -37,6 +37,7 @@ switch(Serial.read()) {
       break; /* optional */
 
 int rate=read_num(3);
+Serial.flush();
 switch(inByte) {
 
    case 'A':
@@ -60,6 +61,6 @@ switch(inByte) {
   motor1.setSpeed(0);
   motor2.setSpeed(0);
   motor3.setSpeed(0);
-  motor4.setSpeed(0);
+  motor4.setSpeed(0);   
    break;
 }}}}
