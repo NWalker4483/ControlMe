@@ -6,7 +6,7 @@ class Linear_Actuator():
         self.lets=lets
         self.path=serial.Serial(port=path) 
     def move(self,dir='F',goal):
-        self.path.write((self.lets+ + dir +str(int(goal*self.ratio)).encode('utf-8')))
+        self.path.write((self.lets+ dir +str(int(goal*self.ratio)).encode('utf-8')))
 
 if __name__=="__main__":
     test=Linear_Actuator()
