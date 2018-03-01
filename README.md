@@ -24,15 +24,15 @@
 * <del>[Control Linear Actuator](https://www.marginallyclever.com/2015/07/how-to-control-a-linear-actuator-with-an-arduino/) with Arduino</del>
 * <del>Connect webcam to servo </del> which is controlled via gamepad
 * Test the bandwidth utilized by the stream
-* Switch Jrk Mode from serial to pwm
+* <del>Switch Jrk Mode from serial to pwm</del>
 ## Necessary Side Quests
 * Slim down modules used/ Remove importing of any unused/noncritical modules
-* Review line 33 and 36 in order to implement control of multiple actuators from arduino
+* <del>Review line 33 and 36 in order to implement control of multiple actuators from arduino</del>
 * Create better testing modes for both pi and arduino
 * Wipe Pi and reinstall backend while logging the setup process 
 * Check out[PS2 Controller with jrk21v3](https://arduino.stackexchange.com/questions/17301/linear-actuator-jitters-vibrates-when-getting-pwm-from-arduino-mega-2560-through)
 * [Pololu jrk 21v3 Documentation](https://www.pololu.com/docs/pdf/0J38/jrk_motor_controller.pdf) Page 29
-* Switch Jrk Input Mode to PWM 
+
 ## Possible Progression
 * Encorporate https://github.com/jeromeetienne/virtualjoystick.js
 * * seperate javascript and <del>css</del> into seperate files
