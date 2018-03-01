@@ -94,6 +94,7 @@ def main():
 
 @socketio.on('robot', namespace='/test')    
 def handle_robot(message):
+	print('Signal Recieved')
 	thread.flow[message['motor']]=message['value']
 	if test_environment==False:
 		if message['motor']=='Speed':
