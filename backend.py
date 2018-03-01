@@ -62,7 +62,7 @@ def accState(roomNumber, accNumber):
 		else:
 			return 'containerOff'
 	else:
-		return 'containerOn'
+		return 'containerOff'
 
 @app.route("/")
 def main():
