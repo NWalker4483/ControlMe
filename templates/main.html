@@ -7,8 +7,7 @@
 	  <meta name="apple-mobile-web-app-capable" content="yes">
 	  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 	  <meta name="mobile-web-app-capable" content="yes">
-
-	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/mainpage.css') }}">
+	  <link rel="stylesheet" type="text/css" href="static/styles/mainpage.css">
 	<script type="text/javascript" src="{{ url_for('static', filename='scripts/mainpage.js') }}"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>   
@@ -78,11 +77,7 @@
 		});
 		</script>
 	</head>
-	<div align='center' class="slider-wrapper">
-		<input id="range-slider" class="fluid-slider" type="range" value="80" min="0" max="100">
-		<span id="range-label" class="range-label"></span>
-	  </div>
-		</div>
+
 		<span id='button'><button class='button'>Dogog</button></span>
 		<div id="gamepadPrompt"></div>
 	</body>
