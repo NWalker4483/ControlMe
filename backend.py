@@ -16,6 +16,7 @@ from camera import VideoCamera
 async_mode = 'threading'
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
+app.config['TEMPLATES_AUTO_RELOAD']=True
 socketio = SocketIO(app, async_mode=async_mode)
 thread = None
 
@@ -38,7 +39,7 @@ class Engine(Thread):
 							{'data':[i,flowstr]},
 							namespace='/test')
 				
-secure= False
+secure= True
 Sliders=['Speed','Arm']
 slides=[[18],[]]
 Buttname = ['Robot', 'Server Room']

@@ -122,16 +122,15 @@ border: 0;
 input::-moz-focus-inner, input::-moz-focus-outer {
 border: 0;
 }
-</style>
-<style>
     body {
+background-color:#000000;
 position: relative;
 margin: 0;
 padding-bottom: 6rem;
 min-height: 100%;
 font-family: HelveticaNeue-UltraLight, Arial, sans-serif;
 }
-.roomtitle{
+.romtitle{
 font-family:HelveticaNeue-Light, Arial, sans-serif;
 font-size:200%;
 font-weight:100;
