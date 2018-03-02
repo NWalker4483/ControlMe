@@ -18,7 +18,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['TEMPLATES_AUTO_RELOAD']=True
 socketio = SocketIO(app, async_mode=async_mode)
-thread = None
+
 
 class Engine(Thread):
 	def __init__(self):

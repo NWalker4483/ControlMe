@@ -130,7 +130,7 @@ padding-bottom: 6rem;
 min-height: 100%;
 font-family: HelveticaNeue-UltraLight, Arial, sans-serif;
 }
-.romtitle{
+.roomtitle{
 font-family:HelveticaNeue-Light, Arial, sans-serif;
 font-size:200%;
 font-weight:100;
@@ -164,7 +164,7 @@ height:152px;
 font-family:HelveticaNeue-UltraLight, Arial, sans-serif;
 font-size:200%;
 color:#F7F7F7;
-background-color: rgb(184, 51, 51);
+background-color: black;
 border: 1px solid #F7F7F7;
 text-align: center;
 border-radius: 152px;
