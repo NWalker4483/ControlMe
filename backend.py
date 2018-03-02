@@ -1,5 +1,3 @@
-#from datetime import timedelta
-#from functools import update_wrapper
 from flask import Flask, render_template,  Markup, make_response, request, current_app, Response
 from flask_socketio import SocketIO, emit
 import subprocess, os, datetime, time, json
@@ -19,7 +17,6 @@ app.config['SECRET_KEY'] = 'secret!'
 app.config['TEMPLATES_AUTO_RELOAD']=True
 socketio = SocketIO(app, async_mode=async_mode)
 
-
 class Engine(Thread):
 	def __init__(self):
 		Thread.__init__(self)
@@ -37,20 +34,22 @@ class Engine(Thread):
 				flowstr = flowstr.replace("'",'')
 				socketio.emit('flow',
 							{'data':[i,flowstr]},
-							namespace='/test')
-				
+							namespace='/test')		
 secure= True
-Sliders=['Speed','Arm']
+global Sliders
+Sliders=['A','B','C','D']
+
 slides=[[18],[]]
 Buttname = ['Robot', 'Server Room']
 accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain']]
 Buttpin = [[7, 17, 27, 22],[27]]
+
+from Pull_Push import Linear_Actuator
+global Actuators
+Actuators=dict()
+for i in Sliders:
+	Actuators[i]=Linear_Actuator(lets=i)
 if test_environment==False:
-	from pisces import ESC
-	from Pull_Push import Linear_Actuator
-	global M1 , M2
-	M1=ESC(18)
-	M2=Linear_Actuator()
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setwarnings(False)
 	for i in range(len(Buttpin)):
@@ -94,17 +93,16 @@ def main():
 	thread.daemon = True
 	thread.start()
 	return render_template('main.html', **templateData)
-
+def dir(x):
+	return 'F' if x>=50 else 'R'
 @socketio.on('robot', namespace='/test')    
 def handle_robot(message):
 	print('Signal Recieved')
 	thread.flow[message['motor']]=message['value']
+	if message['motor'] in ['ABCD']:
+		Actuators[message['motor']].move(dir(message['value']),message['value'])
 	if test_environment==False:
-		if message['motor']=='Speed':
-			M1.update(int(message['value']))
-		if message['motor']=='Arm':
-			M2.move(int(message['value']))
-	
+		pass
 if test_environment==False:							   
 	@app.route("/button/<int:roomNumber>/<int:accNumber>/")
 	def toggle(roomNumber, accNumber):

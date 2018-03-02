@@ -8,6 +8,7 @@
 * RPi.GPIO
 * getch
 * cv2
+* pyserial
 
 ## Steps of progression
 * <del>Install Raspbian OS on Pi</del>
