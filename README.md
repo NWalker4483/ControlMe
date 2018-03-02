@@ -25,6 +25,7 @@
 * <del>Connect webcam to servo </del> which is controlled via gamepad
 * Test the bandwidth utilized by the stream
 * <del>Switch Jrk Mode from serial to pwm</del>
+
 ## Necessary Side Quests
 * Slim down modules used/ Remove importing of any unused/noncritical modules
 * <del>Review line 33 and 36 in order to implement control of multiple actuators from arduino</del>
@@ -41,11 +42,17 @@
 * Have backend print ip address on boot.
 
 * <del>Add PC Mode that ignores gpio</del>
-* ## [Replicate]
-* * (https://www.youtube.com/watch?v=0Pagiqov-dk)
+* ## [Replicate if Possible]
+* * <del>(https://www.youtube.com/watch?v=0Pagiqov-dk)</del>
 * * (https://www.youtube.com/watch?v=L5tx64G1ilQ&t=4s)
 * * (https://arduino.stackexchange.com/questions/17301/linear-actuator-jitters-vibrates-when-getting-pwm-from-arduino-mega-2560-through)
 * * (https://www.arduino.cc/en/Tutorial/Knob)
+ ## Malcolm
+ * QuPass Diagnostic Screen
+ ## Ambria
+ * <del>Control multiple actuators at once from arduino</del>
+ * Vanilla Css/Js Vertical Slider
+
 # References/Tutorials
 * https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page
 * https://github.com/miguelgrinberg/Flask-SocketIO
@@ -56,3 +63,4 @@
 * [CrossDomain](http://flask.pocoo.org/snippets/56/)
 * [Multiple Arduino Streams](https://www.arduino.cc/en/Tutorial/TwoPortRece)
 * [Jrk21v3 with feedback Arduino](https://forum.pololu.com/t/getting-feedback-from-jrk21v3-with-arduino/8823/6)
+* [Gamepad API Demo](https://gamedevelopment.tutsplus.com/tutorials/using-the-html5-gamepad-api-to-add-controller-support-to-browser-games--cms-21345)

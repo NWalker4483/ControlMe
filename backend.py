@@ -68,22 +68,24 @@ def accState(roomNumber, accNumber):
 def main():
 	now = datetime.datetime.now()
 	timeString = now.strftime("%Y-%m-%d %I:%M %p")
-	passer = ''
+	buttons = ''
+	sliders = ''
 	for i in range(len(Buttname)):
-		passer = passer + "<p class='roomtitle'>%s</p>" % (Buttname[i])
+		buttons = buttons + "<p class='roomtitle'>%s</p>" % (Buttname[i])
 		for j in range(len(accName[i])):
 			buttonHtmlName = accName[i][j].replace(" ", "<br>")
-			passer = passer + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
+			buttons = buttons + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
 	
 	for i in range(len(Sliders)):
-		passer = passer + "<div><p class='roomtitle' id='%s'>%s: </p>" % (Sliders[i]+'a',Sliders[i])
-		passer = passer + "	<input class='slider' id='%s' type='range' min='0' max='100' value='50' step='10'/> <br></div>" % (Sliders[i])
-	buttonGrid = Markup(passer)
+		sliders = sliders + "<div><p class='roomtitle' id='%s'>%s: </p>" % (Sliders[i]+'a',Sliders[i])
+		sliders = sliders + "	<input class='slider' id='%s' orient='vertical' type='range' min='0' max='100' value='50' step='10'/> <br></div>" % (Sliders[i])
+	buttonGrid = Markup(buttons)
+	sliderGrid = Markup(sliders)
 	templateData = {
 		'title' : 'MSU RMC Control Center',
 		'time': timeString,
 		'buttons' : buttonGrid,
-		'sliders' : None
+		'sliders' : sliderGrid
 	}
 	global thread
 	#if thread is None:

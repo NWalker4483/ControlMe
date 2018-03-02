@@ -2,6 +2,131 @@
    <head>
 	  <title>{{ title }}</title>
 	  <style>
+	  .fluid-slider {
+  -webkit-appearance: none;
+  width: 300px;
+  height: 25px;
+  background: #c20042;
+  border-radius: 2px;
+  margin: 0;
+  position: relative;
+}
+
+.fluid-slider::-webkit-slider-thumb {
+ -webkit-appearance: none;
+ appearance: none;
+ border-radius: 0;
+ width: 20px;
+ height: 20px;
+ border-radius: 50%;
+ cursor: pointer;
+ background: #fff;
+ opacity: 0.65;
+ border: 4px solid #c20042;
+ position: relative;
+ transition: all ease-in-out 0.05s;
+}
+
+.fluid-slider::-moz-range-thumb {
+ -moz-appearance: none;
+ appearance: none;
+ border-radius: 0;
+ width: 18px;
+ height: 18px;
+ border-radius: 50%;
+ cursor: pointer;
+ background: #fff;
+ opacity: 0.65;
+ border: 4px solid #c20042;
+ position: relative;
+ transition: all ease-in-out 0.05s;
+}
+
+.fluid-slider:focus { outline: none; }
+.fluid-slider:active::-webkit-slider-thumb {
+ background: transparent;
+}
+
+.fluid-slider:active::-moz-range-thumb {
+ background: transparent;
+}
+
+.fluid-slider:active + .range-label {
+  visibility: visible;
+  opacity: 1;
+  top: -75px;
+}
+
+.fluid-slider:before, .fluid-slider::after {
+  position: absolute;
+  content: '';
+  width: 40px;
+  padding: 0.5em;
+  background: #d0d0d0;
+  top: 50%;
+  transform: translateY(-50%);
+  box-sizing: border-box;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 2px;
+}
+
+.fluid-slider:before {
+  left: -50px;
+  content: attr(min);
+}
+
+.fluid-slider:after {
+  right: -50px;
+  content: attr(max);
+}
+
+.range-label {
+  position: relative;
+  display: block;
+  width: 40px;
+  height: 40px;
+  top: -65px;
+  visibility: hidden;
+  opacity: 0;
+  background: #fff;
+  border-radius: 50%;
+  line-height: 30px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 0.8em;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+  border: 6px solid #c20042;
+  left: attr(value)20;
+  transition: all ease-in .05s;
+  z-index: -1;
+}
+
+.range-label:after {
+  position: absolute;
+  content: '';
+  top: 33px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 8px;
+  background-repeat: no-repeat;
+  background-image: radial-gradient(circle, white 50%, transparent 50%), radial-gradient(circle, white 50%, transparent 50%), linear-gradient(#c20042, #c20042);
+  background-size: 180% 100%, 180% 100%, 100% 100%;
+  background-position: 150% 0%, -50% 0%, 100% 100%;
+}
+
+::-moz-range-track {
+ background: #c20042;
+ border: 0;
+}
+
+ input::-moz-focus-inner, input::-moz-focus-outer {
+ border: 0;
+}
+</style>
+	  <style>
 		body {
   position: relative;
   margin: 0;
@@ -92,7 +217,6 @@ width: 100%; /* Width of the outside container */
 .slider {
 -webkit-appearance: none;  /* Override default CSS styles */
 appearance: none;
-width: 100%; /* Full-width */
 height: 35px; /* Specified height */
 background: #d3d3d3; /* Grey background */
 outline: none; /* Remove outline */
@@ -100,22 +224,33 @@ opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
 -webkit-transition: .2s; /* 0.2 seconds transition on hover */
 transition: opacity .2s;
 }
-
+input[type=range][orient=vertical]
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 35px;
+    height: 175px;
+	padding: 0 5px;
+	background: #d3d3d3; /* Grey background */
+outline: none; /* Remove outline */
+opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+-webkit-transition: .2s; /* 0.2 seconds transition on hover */
+transition: opacity .2s;
+}
 /* Mouse-over effects */
-.slider:hover {
+input[type=range][orient=vertical]:hover {
 opacity: 1; /* Fully shown on mouse-over */
 }
 /* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */ 
-.slider::-webkit-slider-thumb {
--webkit-appearance: none; /* Override default look */
-appearance: none;
+input[type=range][orient=vertical]::-webkit-slider-thumb {
+
 width: 35px; /* Set a specific slider handle width */
 height: 35px; /* Slider handle height */
 background: #585858; /* Green background */
 cursor: pointer; /* Cursor on hover */
 border:#F7F7F7;
 }
-.slider::-moz-range-thumb {
+input[type=range][orient=vertical]::-moz-range-thumb {
 width: 40px; /* Set a specific slider handle width */
 height: 40px; /* Slider handle height */
 background: #585858; /* Green background */
@@ -128,7 +263,7 @@ cursor: pointer; /* Cursor on hover */
 	  <meta name="apple-mobile-web-app-status-bar-style" content="black">
 	  <meta name="mobile-web-app-capable" content="yes">
 
-	<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/mainpage.css') }}">
 	<script type="text/javascript" src="{{ url_for('static', filename='mainpage.js') }}"></script>
 	<script type="text/javascript" src="{{ url_for('static', filename='scripts/mainpage.js') }}"></script>
 	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
@@ -139,6 +274,7 @@ cursor: pointer; /* Cursor on hover */
        <div align="center">
 			<img id='stream' src="{{ url_for('video_feed') }}">
 			{{ buttons|safe }}
+			{{ sliders|safe }}
     </div>
 	   <script>function toggle(r,a) {
 			var xhttp = new XMLHttpRequest();
@@ -150,6 +286,13 @@ cursor: pointer; /* Cursor on hover */
 			};
 			xhttp.open("GET", "button/"+r+"/"+a+"/", true);
 			xhttp.send();
+		}
+		
+		function press(r,a){
+
+		}
+		function stop(){
+
 		}
 
 			$(document).ready(function(){
@@ -172,7 +315,10 @@ cursor: pointer; /* Cursor on hover */
 		</script>
 		
 	</head>
-		
+	<div align='center' class="slider-wrapper">
+		<input id="range-slider" class="fluid-slider" type="range" value="80" min="0" max="100">
+		<span id="range-label" class="range-label"></span>
+	  </div>
 		</div>
 		<span id='button'><button class='button'>Dogog</button></span>
 	</body>
