@@ -50,6 +50,7 @@
 * * (https://arduino.stackexchange.com/questions/17301/linear-actuator-jitters-vibrates-when-getting-pwm-from-arduino-mega-2560-through)
 * * (https://www.arduino.cc/en/Tutorial/Knob)
 * * PRIORITY: [Differential drive robot with speed contro](https://www.youtube.com/watch?v=kfT3eoNAM-Q)
+* * PRIORITY: Research Gamepad API + Socket.io
  ## Malcolm
  * QuPass Diagnostic Screen
  ## Ambria

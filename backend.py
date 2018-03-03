@@ -72,7 +72,7 @@ def main():
 	now = datetime.datetime.now()
 	timeString = now.strftime("%Y-%m-%d %I:%M %p")
 	buttons = ''
-	sliders = "<table id='Sliders' style='width:100%'><tr>"
+	sliders = "<table id='Sliders' style='width:100%'; ><tr>"
 	for i in range(len(Buttname)):
 		buttons = buttons + "<div class='roomtitle'>%s</div>" % (Buttname[i])
 		for j in range(len(accName[i])):
