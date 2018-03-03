@@ -3,6 +3,13 @@ from flask_socketio import SocketIO, emit
 import subprocess, os, datetime, time, json
 import time
 from threading import Thread
+# For Disabling Verbose Mode
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+from Pull_Push import Linear_Actuator
+global Actuators
+Actuators=dict()
 test_environment = True
 try:
 	import RPi.GPIO as GPIO
@@ -35,20 +42,16 @@ class Engine(Thread):
 				socketio.emit('flow',
 							{'data':[i,flowstr]},
 							namespace='/test')		
-secure= True
+secure= False
 global Sliders
 Sliders=['A','B','C','D']
+Buttname = ['Robot']
+accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light']]
+Buttpin = [[7, 17, 27, 22]]
 
-slides=[[18],[]]
-Buttname = ['Robot', 'Server Room']
-accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light'], ['The Brain']]
-Buttpin = [[7, 17, 27, 22],[27]]
-
-from Pull_Push import Linear_Actuator
-global Actuators
-Actuators=dict()
 for i in Sliders:
 	Actuators[i]=Linear_Actuator(lets=i)
+
 if test_environment==False:
 	GPIO.setmode(GPIO.BCM)
 	GPIO.setwarnings(False)
@@ -69,18 +72,20 @@ def main():
 	now = datetime.datetime.now()
 	timeString = now.strftime("%Y-%m-%d %I:%M %p")
 	buttons = ''
-	sliders = ''
+	sliders = "<table id='Sliders' style='width:100%'><tr>"
 	for i in range(len(Buttname)):
-		buttons = buttons + "<p class='roomtitle'>%s</p>" % (Buttname[i])
+		buttons = buttons + "<div class='roomtitle'>%s</div>" % (Buttname[i])
 		for j in range(len(accName[i])):
 			buttonHtmlName = accName[i][j].replace(" ", "<br>")
 			buttons = buttons + "<span id='button%d%d'><button class='%s' onclick='toggle(%d,%d)'>%s</button></span>" % (i, j, accState(i,j), i, j, buttonHtmlName)
-	
+
 	for i in range(len(Sliders)):
-		sliders = sliders + "<div><p class='roomtitle' id='%s'>%s: </p>" % (Sliders[i]+'a',Sliders[i])
-		sliders = sliders + "	<input class='slider' id='%s' orient='vertical' type='range' min='0' max='100' value='50' step='10'/> <br></div>" % (Sliders[i])
+		sliders = sliders + "<th><p class='roomtitle' id='%s'>%s: </p></th>" % (Sliders[i]+'a',Sliders[i])
+	sliders+="</tr>"
+	for i in range(len(Sliders)):
+		sliders = sliders + "<td><input class='slider' id='%s' orient='vertical' type='range' min='0' max='100' value='50' step='10' onchange=update()/> </td>" % (Sliders[i])
 	buttonGrid = Markup(buttons)
-	sliderGrid = Markup(sliders)
+	sliderGrid = Markup(sliders+"</table>")
 	templateData = {
 		'title' : 'MSU RMC Control Center',
 		'time': timeString,
@@ -88,21 +93,19 @@ def main():
 		'sliders' : sliderGrid
 	}
 	global thread
-	#if thread is None:
 	thread = Engine()
 	thread.daemon = True
 	thread.start()
 	return render_template('main.html', **templateData)
 def dir(x):
 	return 'F' if x>=50 else 'R'
+	
 @socketio.on('robot', namespace='/test')    
 def handle_robot(message):
 	print('Signal Recieved')
 	thread.flow[message['motor']]=message['value']
 	if message['motor'] in ['ABCD']:
 		Actuators[message['motor']].move(dir(message['value']),message['value'])
-	if test_environment==False:
-		pass
 if test_environment==False:							   
 	@app.route("/button/<int:roomNumber>/<int:accNumber>/")
 	def toggle(roomNumber, accNumber):

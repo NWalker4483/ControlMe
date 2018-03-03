@@ -6,3 +6,4 @@ def hello():
     return render_template('compcheck.html')
 if __name__ == "__main__":
     app.run()
+    
