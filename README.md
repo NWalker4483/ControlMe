@@ -34,6 +34,7 @@
 * Wipe Pi and reinstall backend while logging the setup process 
 * Check out[PS2 Controller with jrk21v3](https://arduino.stackexchange.com/questions/17301/linear-actuator-jitters-vibrates-when-getting-pwm-from-arduino-mega-2560-through)
 * [Pololu jrk 21v3 Documentation](https://www.pololu.com/docs/pdf/0J38/jrk_motor_controller.pdf) Page 29
+* [Implement Differential Steering Algorithms](https://www.impulseadventure.com/elec/robot-differential-steering.html)
 
 ## Possible Progression
 * Encorporate https://github.com/jeromeetienne/virtualjoystick.js
@@ -48,6 +49,7 @@
 * * (https://www.youtube.com/watch?v=L5tx64G1ilQ&t=4s)
 * * (https://arduino.stackexchange.com/questions/17301/linear-actuator-jitters-vibrates-when-getting-pwm-from-arduino-mega-2560-through)
 * * (https://www.arduino.cc/en/Tutorial/Knob)
+* * PRIORITY: [Differential drive robot with speed contro](https://www.youtube.com/watch?v=kfT3eoNAM-Q)
  ## Malcolm
  * QuPass Diagnostic Screen
  ## Ambria
