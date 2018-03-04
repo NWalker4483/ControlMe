@@ -3,6 +3,7 @@ from flask_socketio import SocketIO, emit
 import subprocess, os, datetime, time, json
 import time
 from threading import Thread
+from ignore import de_way
 # For Disabling Verbose Mode
 import logging
 log = logging.getLogger('werkzeug')
@@ -102,10 +103,13 @@ def dir(x):
 	
 @socketio.on('robot', namespace='/test')    
 def handle_robot(message):
-	print('Signal Recieved')
 	thread.flow[message['motor']]=message['value']
-	if message['motor'] in ['ABCD']:
-		Actuators[message['motor']].move(dir(message['value']),message['value'])
+	if message['motor'] in Sliders :
+		Actuators[message['motor']].move(dir(int(message['value'])),message['value'])
+	else:
+		de_way(message['value'][0],message['value'][1])
+		time.sleep(.05)
+
 if test_environment==False:							   
 	@app.route("/button/<int:roomNumber>/<int:accNumber>/")
 	def toggle(roomNumber, accNumber):

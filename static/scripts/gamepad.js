@@ -1,18 +1,4 @@
-<!DOCTYPE html>
-   <head>
-	  <title>{{ title }}</title>
-	  <meta name="theme-color" content="#ffffff">
-	  <meta name="viewport" content="width=device-width, initial-scale=.7">
-	  <meta name="apple-mobile-web-app-capable" content="yes">
-	  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-	  <meta name="mobile-web-app-capable" content="yes">
-	 
-	  <link rel="stylesheet" type="text/css" href="static/styles/mainpage.css">
-	  <!--<script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>-->
-	  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
-	<script type="text/javascript" src='scripts/mainpage.js'></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
-<script>/*!
+/*!
         * gamepad.js v0.0.5-alpha
         * https://github.com/neogeek/gamepad.js
         *
@@ -540,57 +526,3 @@
            }
        
        }());
-	function toggle(r,a) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-    document.getElementById("button"+r+a).innerHTML =
-    this.responseText;
-    }
-    };
-    xhttp.open("GET", "button/"+r+"/"+a+"/", true);
-    xhttp.send();
-    }
-    $(document).ready(function(){
-
-    const gamepad = new Gamepad();
-
-    gamepad.on('connect', e => {
-        $("#gamepadPrompt").html("Gamepad connected!");
-        console.log(`controller ${e.index} connected!`);
-    });
-
-    gamepad.on('hold', 'stick_axis_left', (e) => {
-        $("#gamepadPrompt").html(Math.round(e.value[0]*100).toString()+':'+Math.round(-1*e.value[1]*100).toString());
-        socket.emit('robot', {motor: "Joy1",value:[Math.round(e.value[0]*100),-1*Math.round(e.value[1]*100)]});
-    });
-    namespace = '/test'; // change to an empty string to use the global namespace
-    // the socket.io documentation recommends sending an explicit package upon connection
-    // this is specially important when using the global namespace
-    var socket = io.connect('http://' + document.domain + ':' + location.port + namespace);
-    // event handler for server sent data
-    // the data is displayed in the "Received" section of the page
-    socket.on('flow', function(msg) {
-    $('#'+msg.data[0]+'a').html(msg.data[0]+': '+msg.data[1]);
-	});
-	
-    $("#Sliders").on('input', '.slider',function() {
-    socket.emit('robot', {motor: $(this).attr('id'),value: $(this).val()});
-    return false;
-    });
-});
-
-</script>
-         
-</head>
-   <body>
-       <div align="center">
-			<img id='stream' src='video_feed'>
-			{{ buttons|safe }}
-			{{ sliders|safe }}
-    </div>
-	</head>
-		<div class='roomtitle' id="gamepadPrompt"></div>
-		<div class='roomtitle' id="gamepadDisplay"></div>
-	</body>
-</html>

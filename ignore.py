@@ -2,40 +2,37 @@
 
 #variables
 #Joystick input variables
-joyXValue = 0 
-joyYValue = 0 
-joyValueMax = 100 
-joyValueMin = -100 
-joyValueMid = 0 
-joyValueMidUpper = joyValueMid + 5 
-joyValueMidLower = joyValueMid - 5 
-
-#DC motor variables
-speedFwd = 0 
-speedTurn = 0 
-speedLeft = 0 
-speedRight = 0 
 
 
-motorSpeed = 0 
-motorSpeedMax = 255 
-motorSpeedMin = 90  # #set to smallest value that make motor move (default 0)
-                        #  # DC motor that I use start to move at 90 pwm value
-def constrain(val, min_val, max_val):
-
-    if val < min_val: return min_val
-    if val > max_val: return max_val
-    return val
-def map(x,input_start,input_end,output_start,output_end):
-    return (x - input_start) / (input_end - input_start) * (output_end - output_start) + output_start
-
-
-while 1==1:
+def de_way(joyXValue,joyYValue):
    # joyXValue = analogRead(joyStickXPin)   #Turn
    # joyYValue = analogRead(joyStickYPin)   #Forward/backward
+
+    joyValueMax = 100 
+    joyValueMin = -100 
+    joyValueMid = 0 
+    joyValueMidUpper = joyValueMid + 10 
+    joyValueMidLower = joyValueMid - 10
+
+    #DC motor variables
+    speedFwd = 0 
+    speedTurn = 0 
+    speedLeft = 0 
+    speedRight = 0 
+
+
+    motorSpeed = 0 
+    motorSpeedMax = 255 
+    motorSpeedMin = 45  # #set to smallest value that make motor move (default 0)
+                            #  # DC motor that I use start to move at 90 pwm value
+    def constrain(val, min_val, max_val):
+        if val < min_val: return min_val
+        if val > max_val: return max_val
+        return val
+    def map(x,input_start,input_end,output_start,output_end):
+        return (x - input_start) / (input_end - input_start) * (output_end - output_start) + output_start
+
     
-    joyXValue = int(input("X "))
-    joyYValue = int(input("Y "))
     
     if(joyYValue > joyValueMidUpper): #forward
         speedFwd = map(joyYValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax) 
@@ -60,10 +57,10 @@ while 1==1:
     
     #MoveRobot(speedLeft,speedRight) 
 
-    print(speedFwd) 
-    print(speedTurn) 
-    print(speedLeft) 
-    print(speedRight) 
+    #print("Fwd: "+ str(speedFwd))
+    #print("Turn: "+ str(speedTurn)) 
+    print(str(int(speedLeft))+str(int(speedRight)))
+
     
 '''
 def MoveRobot( spdL,  spdR):
