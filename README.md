@@ -52,7 +52,7 @@
 * * PRIORITY: [Differential drive robot with speed contro](https://www.youtube.com/watch?v=kfT3eoNAM-Q)
 * * PRIORITY: Research Gamepad API + Socket.io
  ## Malcolm
- * QuPass Diagnostic Screen
+ * [QuPass Diagnostic Screen](http://www.circuitbasics.com/raspberry-pi-lcd-set-up-and-programming-in-python/)
  ## Ambria
  * <del>Control multiple actuators at once from arduino</del>
  * Vanilla Css/Js Vertical Slider
