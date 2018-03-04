@@ -5,9 +5,11 @@ import time
 from threading import Thread
 from ignore import de_way
 # For Disabling Verbose Mode
+'''
 import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
+'''
 from Pull_Push import Linear_Actuator
 global Actuators
 Actuators=dict()
@@ -87,6 +89,7 @@ def main():
 		sliders = sliders + "<td><input class='slider' id='%s' orient='vertical' type='range' min='0' max='100' value='50' step='10' onchange=update()/> </td>" % (Sliders[i])
 	buttonGrid = Markup(buttons)
 	sliderGrid = Markup(sliders+"</table>")
+
 	templateData = {
 		'title' : 'MSU RMC Control Center',
 		'time': timeString,
@@ -108,7 +111,7 @@ def handle_robot(message):
 		Actuators[message['motor']].move(dir(int(message['value'])),message['value'])
 	else:
 		de_way(message['value'][0],message['value'][1])
-		time.sleep(.05)
+	
 
 if test_environment==False:							   
 	@app.route("/button/<int:roomNumber>/<int:accNumber>/")

@@ -59,7 +59,7 @@ def de_way(joyXValue,joyYValue):
 
     #print("Fwd: "+ str(speedFwd))
     #print("Turn: "+ str(speedTurn)) 
-    print(str(int(speedLeft))+str(int(speedRight)))
+    print(str(int(speedLeft))+" : "+str(int(speedRight)))
 
     
 '''

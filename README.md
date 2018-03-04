@@ -58,6 +58,8 @@
  * Vanilla Css/Js Vertical Slider
  ## Nile:
  * https://github.com/neogeek/gamepad.js/tree/master
+## Anyone
+* [Increase FPS on video stream](https://www.pyimagesearch.com/2017/02/06/faster-video-file-fps-with-cv2-videocapture-and-opencv/)
 
 # References/Tutorials
 * https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page
