@@ -2,19 +2,19 @@
 
 #variables
 #Joystick input variables
- joyXValue = 0 
- joyYValue = 0 
- joyValueMax = 100 
- joyValueMin = -100 
- joyValueMid = 0 
- joyValueMidUpper = joyValueMid + 50 
- joyValueMidLower = joyValueMid - 50 
+joyXValue = 0 
+joyYValue = 0 
+joyValueMax = 100 
+joyValueMin = -100 
+joyValueMid = 0 
+joyValueMidUpper = joyValueMid + 5 
+joyValueMidLower = joyValueMid - 5 
 
 #DC motor variables
- speedFwd = 0 
- speedTurn = 0 
- speedLeft = 0 
- speedRight = 0 
+speedFwd = 0 
+speedTurn = 0 
+speedLeft = 0 
+speedRight = 0 
 
 
 motorSpeed = 0 
@@ -30,12 +30,12 @@ def map(x,input_start,input_end,output_start,output_end):
     return (x - input_start) / (input_end - input_start) * (output_end - output_start) + output_start
 
 
-while True:
+while 1==1:
    # joyXValue = analogRead(joyStickXPin)   #Turn
    # joyYValue = analogRead(joyStickYPin)   #Forward/backward
     
-    joyXValue = int(input())
-    joyYValue = int(input())
+    joyXValue = int(input("X "))
+    joyYValue = int(input("Y "))
     
     if(joyYValue > joyValueMidUpper): #forward
         speedFwd = map(joyYValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax) 
@@ -59,15 +59,11 @@ while True:
     speedRight = constrain(speedRight, -255, 255) 
     
     #MoveRobot(speedLeft,speedRight) 
-  
+
     print(speedFwd) 
-    print(" ") 
     print(speedTurn) 
-    print(" " ) 
     print(speedLeft) 
-    print(" " ) 
     print(speedRight) 
-    print(" ") 
     
 '''
 def MoveRobot( spdL,  spdR):

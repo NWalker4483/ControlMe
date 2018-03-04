@@ -119,7 +119,7 @@ function axisMoved(b) {
   if(axisMoved(gp)){
     press(gp);
     socket.emit('robot', {motor: $(this).attr('id'),value: [Math.round(b.axes[0]),Math.round(b.axes[1])]});
-    return false;
+    
   }
     }
 

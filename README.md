@@ -56,6 +56,8 @@
  ## Ambria
  * <del>Control multiple actuators at once from arduino</del>
  * Vanilla Css/Js Vertical Slider
+ ## Nile:
+ * https://github.com/neogeek/gamepad.js/tree/master
 
 # References/Tutorials
 * https://stackoverflow.com/questions/40963401/flask-dynamic-data-update-without-reload-page
