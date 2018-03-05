@@ -562,11 +562,11 @@
 
     gamepad.on('hold', 'stick_axis_left', (e) => {
         $("#gamepadPrompt").html(Math.round(e.value[0]*100).toString()+':'+Math.round(-1*e.value[1]*100).toString());
-        socket.emit('robot', {motor: "Joy1",value:[Math.round(e.value[0]*100),-1*Math.round(e.value[1]*100)]});
+        socket.emit('joystick', {motor: "Joy1",value:[Math.round(e.value[0]*100),-1*Math.round(e.value[1]*100)]});
     });
 
 gamepad.on('press', 'shoulder_bottom_right', e => {
-    socket.emit('robot', {motor: "Joy1",value:[Math.round(e.value*100),-1*Math.round(e.value*100)]});
+    socket.emit('robot', {motor: e.button,value:e.value});
     console.log(`shoulder_bottom_right has a value of ${e.value}!`);
 });
 
@@ -579,7 +579,7 @@ gamepad.on('press', 'shoulder_bottom_right', e => {
     socket.on('flow', function(msg) {
     $('#'+msg.data[0]+'a').html(msg.data[0]+': '+msg.data[1]);
 	});
-	
+	 
     $("#Sliders").on('input', '.slider',function() {
     socket.emit('robot', {motor: $(this).attr('id'),value: $(this).val()});
     return false;
@@ -587,7 +587,6 @@ gamepad.on('press', 'shoulder_bottom_right', e => {
 });
 
 </script>
-         
 </head>
    <body>
        <div align="center">

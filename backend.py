@@ -10,23 +10,6 @@ import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 '''
-from Pull_Push import Linear_Actuator
-global Actuators
-Actuators=dict()
-test_environment = True
-try:
-	import RPi.GPIO as GPIO
-	test_environment = False
-except ImportError:
-	pass
-from camera import VideoCamera
-
-async_mode = 'threading'
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
-app.config['TEMPLATES_AUTO_RELOAD']=True
-socketio = SocketIO(app, async_mode=async_mode)
-
 class Engine(Thread):
 	def __init__(self):
 		Thread.__init__(self)
@@ -44,7 +27,26 @@ class Engine(Thread):
 				flowstr = flowstr.replace("'",'')
 				socketio.emit('flow',
 							{'data':[i,flowstr]},
-							namespace='/test')		
+							namespace='/test')	
+
+from Pull_Push import Linear_Actuator
+global Actuators
+Actuators=dict()
+test_environment = True
+try:
+	import RPi.GPIO as GPIO
+	test_environment = False
+except ImportError:
+	pass
+from camera import VideoCamera
+
+async_mode = 'threading'
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+app.config['TEMPLATES_AUTO_RELOAD']=True
+socketio = SocketIO(app, async_mode=async_mode)
+
+	
 secure= False
 global Sliders
 Sliders=['A','B','C','D']
@@ -52,8 +54,8 @@ Buttname = ['Robot']
 accName= [['Conveyor Belt', 'Front Light', 'Back Light', 'Bright Light']]
 Buttpin = [[7, 17, 27, 22]]
 
-for i in Sliders:
-	Actuators[i]=Linear_Actuator(lets=i)
+for i in range(len(Sliders)):
+	Actuators[i]=Linear_Actuator(lets="ABCD"[i])
 
 if test_environment==False:
 	GPIO.setmode(GPIO.BCM)
@@ -101,6 +103,10 @@ def main():
 	thread.daemon = True
 	thread.start()
 	return render_template('main.html', **templateData)
+
+@socketio.on('joystick', namespace='/test')    
+def steering(message):
+		de_way(message['value'][0],message['value'][1])
 def dir(x):
 	return 'F' if x>=50 else 'R'
 	
@@ -109,9 +115,6 @@ def handle_robot(message):
 	thread.flow[message['motor']]=message['value']
 	if message['motor'] in Sliders :
 		Actuators[message['motor']].move(dir(int(message['value'])),message['value'])
-	else:
-		de_way(message['value'][0],message['value'][1])
-	
 
 if test_environment==False:							   
 	@app.route("/button/<int:roomNumber>/<int:accNumber>/")

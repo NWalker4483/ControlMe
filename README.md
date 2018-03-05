@@ -72,3 +72,5 @@
 * [Multiple Arduino Streams](https://www.arduino.cc/en/Tutorial/TwoPortRece)
 * [Jrk21v3 with feedback Arduino](https://forum.pololu.com/t/getting-feedback-from-jrk21v3-with-arduino/8823/6)
 * [Gamepad API Demo](https://gamedevelopment.tutsplus.com/tutorials/using-the-html5-gamepad-api-to-add-controller-support-to-browser-games--cms-21345)
+http://www.instructables.com/id/Super-Easy-Reversible-Motor-Control-for-Arduino-/
+* [Arduino Motor Shield]
