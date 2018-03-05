@@ -117,9 +117,9 @@ def handle_robot(message):
 	##############################################
 	thread.flow[message['motor']]=message['value']
 	if message['value']=="GO" and message['motor']=='shoulder_bottom_right':
-		Actuators['A'].move('F',255)
+		Actuators['A'].move('F',100)
 	if message['value']=="GO" and message['motor']=='shoulder_top_right':
-		Actuators['A'].move('B',255)
+		Actuators['A'].move('B',100)
 	if message['value']=="STOP":
 		Actuators['A'].move('R',0)
 	if message['motor'] in Sliders :
