@@ -112,9 +112,18 @@ def dir(x):
 	
 @socketio.on('robot', namespace='/test')    
 def handle_robot(message):
+	##############################################
+	###########TESTING CODE TO BE REMOVED#########
+	##############################################
 	thread.flow[message['motor']]=message['value']
+	if message['value']=="GO" and message['motor']=='shoulder_bottom_right':
+		Actuators['A'].move('F',255)
+	if message['value']=="GO" and message['motor']=='shoulder_top_right':
+		Actuators['A'].move('B',255)
+	if message['value']=="STOP":
+		Actuators['A'].move('R',0)
 	if message['motor'] in Sliders :
-		Actuators[message['motor']].move(dir(int(message['value'])),message['value'])
+		Actuators[message['motor']].move(dir(int(message['value'])),int(message['value']))
 
 if test_environment==False:							   
 	@app.route("/button/<int:roomNumber>/<int:accNumber>/")

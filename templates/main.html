@@ -566,8 +566,19 @@
     });
 
 gamepad.on('press', 'shoulder_bottom_right', e => {
-    socket.emit('robot', {motor: e.button,value:e.value});
-    console.log(`shoulder_bottom_right has a value of ${e.value}!`);
+    socket.emit('robot', {motor: e.button,value:"GO"});
+});
+
+gamepad.on('release', 'shoulder_bottom_right', e => {
+    socket.emit('robot', {motor: e.button ,value:"STOP"});
+});
+
+gamepad.on('press', 'shoulder_top_right', e => {
+    socket.emit('robot', {motor: e.button,value:"GO"});
+});
+
+gamepad.on('release', 'shoulder_top_right', e => {
+    socket.emit('robot', {motor: e.button ,value:"STOP"});
 });
 
     namespace = '/test'; // change to an empty string to use the global namespace
