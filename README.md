@@ -74,3 +74,6 @@
 * [Gamepad API Demo](https://gamedevelopment.tutsplus.com/tutorials/using-the-html5-gamepad-api-to-add-controller-support-to-browser-games--cms-21345)
 http://www.instructables.com/id/Super-Easy-Reversible-Motor-Control-for-Arduino-/
 * [Arduino Motor Shield]
+# Shopping List
+* https://www.adafruit.com/product/976
+* https://www.amazon.com/Uxcell-a14122000ux0207-Mounted-JQX-13F-Socket/dp/B01DIVCVPO/ref=sr_1_2?s=industrial&rps=1&ie=UTF8&qid=1520209496&sr=1-2&keywords=dpdt+24+volt+Relay&refinements=p_85%3A2470955011&dpID=41M8BD-OAsL&preST=_SX342_QL70_&dpSrc=srch

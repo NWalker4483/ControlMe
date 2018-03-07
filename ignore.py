@@ -20,7 +20,6 @@ def de_way(joyXValue,joyYValue):
     speedLeft = 0 
     speedRight = 0 
 
-
     motorSpeed = 0 
     motorSpeedMax = 255 
     motorSpeedMin = 45  # #set to smallest value that make motor move (default 0)

@@ -11,8 +11,8 @@ class VideoCamera(object):
         self.pixelsize=pixelsize
         self.capstr="Capturing"
         self.video = cv2.VideoCapture(0)
-        #self.video.set(3,640)
-        #self.video.set(4,480)
+        self.video.set(3,640)
+        self.video.set(4,480)
         # If you decide to use video.mp4, you must have this file in the folder
         # as the main.py.
         # self.video = cv2.VideoCapture('video.mp4')
