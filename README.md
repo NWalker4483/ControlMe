@@ -80,5 +80,7 @@ http://www.instructables.com/id/Super-Easy-Reversible-Motor-Control-for-Arduino-
 
 # Autonomy
 * http://answers.opencv.org/question/92133/detection-of-stones-rocks-on-field-surface/
+* [Depth Exclusion by Color Segementation](https://ac.els-cdn.com/S2212017312002502/1-s2.0-S2212017312002502-main.pdf?_tid=a0f8a593-8996-43b6-b740-4252794d2d02&acdnat=1521141648_caae2e1656fc1909245159419b119c9b)
+* http://www.nbertagnolli.com/jekyll/update/2015/10/13/Object_Tracking.html
 # Network
 * https://ariandy1.wordpress.com/2013/04/18/wifi-access-point-with-tp-link-tl-wn722n-on-ubuntu-12-04/
