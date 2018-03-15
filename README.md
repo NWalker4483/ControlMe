@@ -77,3 +77,8 @@ http://www.instructables.com/id/Super-Easy-Reversible-Motor-Control-for-Arduino-
 # Shopping List
 * https://www.adafruit.com/product/976
 * https://www.amazon.com/Uxcell-a14122000ux0207-Mounted-JQX-13F-Socket/dp/B01DIVCVPO/ref=sr_1_2?s=industrial&rps=1&ie=UTF8&qid=1520209496&sr=1-2&keywords=dpdt+24+volt+Relay&refinements=p_85%3A2470955011&dpID=41M8BD-OAsL&preST=_SX342_QL70_&dpSrc=srch
+
+# Autonomy
+* http://answers.opencv.org/question/92133/detection-of-stones-rocks-on-field-surface/
+# Network
+* https://ariandy1.wordpress.com/2013/04/18/wifi-access-point-with-tp-link-tl-wn722n-on-ubuntu-12-04/
