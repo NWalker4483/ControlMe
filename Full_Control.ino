@@ -19,51 +19,6 @@ int read_num(int numberOfDigits){
   theNumber = atoi(theNumberString);
   return theNumber;
 }
-int* get_RL(int joyXValue,int joyYValue){
-    int joyValueMax = 100; 
-    int joyValueMin = -100; 
-    int joyValueMid = 0;
-    int joyValueMidUpper = joyValueMid + 10;
-    int joyValueMidLower = joyValueMid - 10;
-
-    //DC motor variables
-    int speedFwd = 0;
-    int speedTurn = 0;
-    int speedLeft = 0;
-    int speedRight = 0; 
-
-    int motorSpeed = 0;
-    int motorSpeedMax = 255; 
-    int motorSpeedMin = 45;  //set to smallest value that make motor move (default 0)
-                            // DC motor that I use start to move at 90 pwm value  
-    if(joyYValue > joyValueMidUpper){//forward
-        speedFwd = map(joyYValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax); 
-     } else if(joyYValue < joyValueMidLower){ //backward
-        speedFwd = map(joyYValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax) ;
-     }
-    else{
-       speedFwd =0 ;
-    }
-    
-    if(joyXValue > joyValueMidUpper){  //right
-        speedTurn = map(joyXValue, joyValueMidUpper, joyValueMax, motorSpeedMin, motorSpeedMax); 
-    }
-    else if(joyXValue < joyValueMidLower){//left
-        speedTurn = map(joyXValue, joyValueMidLower, joyValueMin, -motorSpeedMin, -motorSpeedMax);
-        }
-    else{
-       speedTurn = 0 ;
-    }
-    speedLeft = speedFwd + speedTurn;
-    speedRight = speedFwd - speedTurn;
-
-    speedLeft = constrain(speedLeft, -255, 255);
-    speedRight = constrain(speedRight, -255, 255);
-    int* xy = malloc(sizeof(int) * 2);
-    xy[0]=speedLeft;
-    xy[1]=speedRight;
-    return xy;
-}
 void setup() {
   // put your setup code here, to run once:
 for (int i=0;i<4;i++){
@@ -95,6 +50,8 @@ AllMotors[inByte-1].run(direct);
 
 }
 if (inByte==4){
+int right=read_num(3);
+int left=read_num(3);
 
 }
 

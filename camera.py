@@ -76,24 +76,31 @@ class VideoCamera(object):
             _gamma[i] = a
         return _gamma
     def filter(self,image,depth):
-        hsv = cv2.cvtColor(depth, cv2.COLOR_BGR2HSV)
-        lower_red = np.array([12,22,121])
-        upper_red = np.array([255,255,180])
-        mask = cv2.inRange(hsv, lower_red, upper_red)
-        image = cv2.bitwise_and(image, image, mask = mask)
+        image = cv2.GaussianBlur(image, (11, 11), 0)
+        image=cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
+        hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+        BOUNDARIES = {
+        'red': ([170, 160, 60], [180, 255, 255]),
+        'blue': ([100, 50, 50], [130, 255, 255]),
+        'green': ([38, 50, 50], [75, 255, 255]),
+        'yellow':([103, 50, 50], [145, 255, 255])
+        }
+        mask = cv2.inRange(hsv, np.array(BOUNDARIES['blue'][0]), np.array(BOUNDARIES['blue'][1]))
+        mask = cv2.GaussianBlur(mask, (11, 11), 0)
+        image = cv2.bitwise_and(depth, depth, mask = mask)
         return image
 
 
     def get_frame(self,depth=False):
         if self.kinect and depth==False:
             image,_ = freenect.sync_get_video()
-        if depth:
+            image=cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
+        elif self.kinect and depth==True:
             depth,_ = freenect.sync_get_depth() # get the depth readinngs from the camera
             image = self.make_gamma()[depth].astype(np.uint8) 
             image=cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
             image=self.filter(freenect.sync_get_video()[0],image)
-            
-            
+
         else:
             success, image = self.video.read()
         if self.pixelsize!=None:
