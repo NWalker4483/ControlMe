@@ -19,6 +19,7 @@ class VideoCamera(object):
         if kinect:
             import freenect
             self.video=freenect
+            
         else:
             self.video = cv2.VideoCapture(0)
             self.video.set(3,640)
