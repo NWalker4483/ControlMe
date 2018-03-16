@@ -6,6 +6,7 @@ AF_DCMotor motor3(3);
 AF_DCMotor motor4(4);
 uint8_t direct;
 byte inByte;
+//Convert Serial input in to an integer value: given number of digits
 int read_num(int numberOfDigits){
   char theNumberString[numberOfDigits + 1];
   int theNumber;
@@ -28,13 +29,13 @@ inByte=Serial.read();
 switch(Serial.read()) {
    case 'F':
       direct=FORWARD;
-      break; /* optional */
+      break; 
    case 'B':
       direct=BACKWARD;
-      break; /* optional */
+      break;
    case 'R':
       direct=RELEASE;
-      break; /* optional */
+      break;
 
 int rate=read_num(3);
 switch(inByte) {
@@ -42,21 +43,20 @@ switch(inByte) {
    case 'A':
       motor1.setSpeed(rate);
       motor1.run(direct);
-      break; /* optional */
+      break; 
    case 'B':
       motor2.setSpeed(rate);
       motor2.run(direct);
-      break; /* optional */
+      break;
    case 'C':
       motor3.setSpeed(rate);
       motor3.run(direct);
-      break; /* optional */
+      break; 
    case 'D':
       motor4.setSpeed(rate);
       motor4.run(direct);
-      break; /* optional */
-   /* you can have any number of case statements */
-   default : /* Optional */
+      break; 
+   default : 
   motor1.setSpeed(0);
   motor2.setSpeed(0);
   motor3.setSpeed(0);

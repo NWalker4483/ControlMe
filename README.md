@@ -82,3 +82,4 @@ http://www.instructables.com/id/Super-Easy-Reversible-Motor-Control-for-Arduino-
 * http://answers.opencv.org/question/92133/detection-of-stones-rocks-on-field-surface/
 # Network
 * https://ariandy1.wordpress.com/2013/04/18/wifi-access-point-with-tp-link-tl-wn722n-on-ubuntu-12-04/
+* [SSH+Hostapd](https://wiki.alpinelinux.org/wiki/Raspberry_Pi_3_-_Configuring_it_as_wireless_access_point_-AP_Mode)
