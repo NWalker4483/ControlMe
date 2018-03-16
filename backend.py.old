@@ -1,15 +1,15 @@
-from flask import Flask, render_template,  Markup, make_response, request, current_app, Response
+from flask import Flask, render_template,  Markup, Response
 from flask_socketio import SocketIO, emit
-import subprocess, os, datetime, time, json
+import subprocess, os, datetime, time
 import time
 from threading import Thread
 from ignore import de_way
 # For Disabling Verbose Mode
-
+'''
 import logging
 log = logging.getLogger("werkzeug")
 log.setLevel(logging.ERROR)
-
+'''
 class Engine(Thread):
 	def __init__(self):
 		Thread.__init__(self)
@@ -55,7 +55,8 @@ accName= [["Conveyor Belt", "Front Light", "Back Light", "Bright Light"]]
 Buttpin = [[7, 17, 27, 22]]
 
 for i in range(len(Sliders)):
-	Actuators[Sliders[i]]=Linear_Actuator(lets="ABCD"[i])
+	if i<4:
+		Actuators[Sliders[i]]=Linear_Actuator(lets="1234"[i])
 
 if test_environment==False:
 	GPIO.setmode(GPIO.BCM)
@@ -115,6 +116,7 @@ def handle_robot(message):
 	##############################################
 	###########TESTING CODE TO BE REMOVED#########
 	##############################################
+	###########Button    motor    dir    #########
 	thread.flow[message["motor"]]=message["value"]
 	if message["value"]=="GO" and message["motor"]=="shoulder_bottom_right":
 		Actuators["A"].move("F",100)
@@ -146,7 +148,7 @@ def gen(camera):
 
 @app.route("/video_feed")
 def video_feed():
-    return Response(gen(VideoCamera(kinect=True)),
+    return Response(gen(VideoCamera()),
                     mimetype="multipart/x-mixed-replace; boundary=frame")
 
 if __name__ == "__main__":
