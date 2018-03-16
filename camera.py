@@ -90,17 +90,24 @@ class VideoCamera(object):
         mask = cv2.GaussianBlur(mask, (11, 11), 0)
         image = cv2.bitwise_and(depth, depth, mask = mask)
         return image
-
-
+    def getDepthMap(self):	
+	depth, timestamp = freenect.sync_get_depth()
+ 
+	np.clip(depth, 0, 2**10 - 1, depth)
+	depth >>= 2
+	depth = depth.astype(np.uint8)
+	return depth
+#http://www.gilles-bertrand.com/2014/03/dijkstra-algorithm-python-example-source-code-shortest-path.html
     def get_frame(self,depth=False):
         if self.kinect and depth==False:
             image,_ = freenect.sync_get_video()
             image=cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
         elif self.kinect and depth==True:
-            depth,_ = freenect.sync_get_depth() # get the depth readinngs from the camera
-            image = self.make_gamma()[depth].astype(np.uint8) 
-            image=cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
-            image=self.filter(freenect.sync_get_video()[0],image)
+            depth= self.getDepthMap()# get the depth readinngs from the camera
+            image = np.gradient(depth)[1]
+            #image = self.make_gamma()[depth].astype(np.uint8) 
+            #image=cv2.cvtColor(image,cv2.COLOR_RGB2BGR)
+            #image=self.filter(freenect.sync_get_video()[0],image)
 
         else:
             success, image = self.video.read()

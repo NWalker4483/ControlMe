@@ -84,10 +84,7 @@ http://www.instructables.com/id/Super-Easy-Reversible-Motor-Control-for-Arduino-
 * http://www.nbertagnolli.com/jekyll/update/2015/10/13/Object_Tracking.html
 * https://people.csail.mit.edu/spillai/data/papers/cvclass-project-paper.pdf
 * https://www.codeproject.com/Articles/317974/KinectDepthSmoothing
+http://www.vagostudio.com/giulio/wp-content/uploads/2014/04/SR_2014.pdf
 # Network
 * https://ariandy1.wordpress.com/2013/04/18/wifi-access-point-with-tp-link-tl-wn722n-on-ubuntu-12-04/
-<<<<<<< HEAD
 http://acumen.lib.ua.edu/u0015/0000001/0002182/u0015_0000001_0002182.pdf
-=======
-* [SSH+Hostapd](https://wiki.alpinelinux.org/wiki/Raspberry_Pi_3_-_Configuring_it_as_wireless_access_point_-AP_Mode)
->>>>>>> 2b8055d89a2b287109c30f7b30cff3b408c882ce
