@@ -1,27 +1,28 @@
-import numpy as np
-import matplotlib.pyplot as plt
+
 import cv2
-from scipy.interpolate import Rbf
-varray=cv2.imread('/Users/nile/Downloads/testo.png')
-varray=cv2.GaussianBlur(varray,(11,11),7)
-#varray=cv2.cvtColor(varray,cv2.COLOR_BGR2GRAY)
-print("ok")
+import numpy as np
+from matplotlib import pyplot as plt
 
-varray=np.array([[(np.sin(i)*255) for i in range(500)] for a in range(500)])
-lx,ly=varray.shape[0],varray.shape[1]
-cv2.imshow('',varray)
+img0=cv2.imread('/Users/nile/Downloads/testo.png')
+# loading image
+#img0 = cv2.imread('SanFrancisco.jpg',)
+
+# converting to gray scale
+gray = cv2.cvtColor(img0, cv2.COLOR_BGR2GRAY)
+#gray=cv2.Canny(gray,50,200)
+# remove noise
+img = cv2.GaussianBlur(gray,(31,31),1,1)
+img=gray
+# convolute with proper kernels
+#laplacian = cv2.Laplacian(img,cv2.CV_64F)
+vgrad=np.gradient(gray)
+mag = np.sqrt(vgrad[0]**2 + vgrad[1]**2)
+cv2.imshow("l",gray)
 cv2.waitKey(0)
-vgrad = np.gradient(varray)
+#sobelx = cv2.Sobel(img,cv2.CV_64F,1,0,ksize=5)  # x
+#sobely = cv2.Sobel(img,cv2.CV_64F,0,1,ksize=5)  # y
+#xsobely = cv2.Canny(sobely,100,200)
 
-mag = vgrad[0]+ vgrad[1]
-plt.imshow(mag, vmin = np.amin(mag), vmax=np.amax(mag))
+plt.imshow(mag,cmap=plt.get_cmap('hot'), vmin = np.amin(mag),vmax = np.amax(mag))  
 plt.colorbar()
 plt.show()  
-'''
-
-x, y, z, d = np.random.rand(4, 50)
-rbfi = Rbf(x, y, z, d)  # radial basis function interpolator instance
-xi = yi = zi = np.linspace(0, 1, 20)
-di = rbfi(xi, yi, zi)   # interpolated values
-print(di.shape)
-'''

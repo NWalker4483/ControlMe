@@ -91,13 +91,13 @@ class VideoCamera(object):
         image = cv2.bitwise_and(depth, depth, mask = mask)
         return image
     def getDepthMap(self):	
-	depth, timestamp = freenect.sync_get_depth()
+        depth, timestamp = freenect.sync_get_depth()
  
-	np.clip(depth, 0, 2**10 - 1, depth)
-	depth >>= 2
-	depth = depth.astype(np.uint8)
-	return depth
-#http://www.gilles-bertrand.com/2014/03/dijkstra-algorithm-python-example-source-code-shortest-path.html
+        np.clip(depth, 0, 2**10 - 1, depth)
+        depth >>= 2
+        depth = depth.astype(np.uint8)
+        return depth
+        #http://www.gilles-bertrand.com/2014/03/dijkstra-algorithm-python-example-source-code-shortest-path.html
     def get_frame(self,depth=False):
         if self.kinect and depth==False:
             image,_ = freenect.sync_get_video()
@@ -132,4 +132,18 @@ class VideoCamera(object):
             lineType)'''
         ret, jpeg = cv2.imencode('.jpg', image)
         return jpeg.tobytes()
-        
+def pixelate(_image,pixelSize=32):
+    backgroundColor = (0,)*3
+    _image = cv2.flip(_image,1)
+    _image=Image.fromarray(_image)
+    _image = _image.resize((int(_image.size[0]/pixelSize), int(_image.size[1]/pixelSize)), Image.NEAREST)
+    _image = _image.resize((int(_image.size[0]*pixelSize), int(_image.size[1]*pixelSize)), Image.NEAREST)
+    """
+    pixel=_image.load()
+    for i in range(0,_image.size[0],pixelSize):
+        for j in range(0,_image.size[1],pixelSize):
+            for r in range(pixelSize):
+                pixel[i+r,j] = backgroundColor
+                pixel[i,j+r] = backgroundColor
+                """
+    return np.array(_image)
