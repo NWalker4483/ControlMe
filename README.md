@@ -87,4 +87,6 @@ http://www.instructables.com/id/Super-Easy-Reversible-Motor-Control-for-Arduino-
 http://www.vagostudio.com/giulio/wp-content/uploads/2014/04/SR_2014.pdf
 # Network
 * https://ariandy1.wordpress.com/2013/04/18/wifi-access-point-with-tp-link-tl-wn722n-on-ubuntu-12-04/
-http://acumen.lib.ua.edu/u0015/0000001/0002182/u0015_0000001_0002182.pdf
+* http://acumen.lib.ua.edu/u0015/0000001/0002182/u0015_0000001_0002182.pdf
+# Cleaning Data 
+* https://ocefpaf.github.io/python4oceanographers/blog/2014/10/20/gridfill/

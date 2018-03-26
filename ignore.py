@@ -51,15 +51,17 @@ def de_way(joyXValue,joyYValue):
     speedLeft = speedFwd + speedTurn 
     speedRight = speedFwd - speedTurn 
 
-    speedLeft = constrain(speedLeft, -255, 255) 
-    speedRight = constrain(speedRight, -255, 255) 
+    speedLeft = constrain(speedLeft, motorSpeedMin, motorSpeedMax) 
+    speedRight = constrain(speedRight, motorSpeedMin, motorSpeedMax) 
     
     #MoveRobot(speedLeft,speedRight) 
 
     #print("Fwd: "+ str(speedFwd))
     #print("Turn: "+ str(speedTurn)) 
+
     print(str(int(speedLeft))+" : "+str(int(speedRight)))
 
+    return (str(int(speedLeft))+str(int(speedRight)))
     
 '''
 def MoveRobot( spdL,  spdR):

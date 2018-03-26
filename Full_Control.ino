@@ -44,8 +44,8 @@ switch(Serial.read()) {
       direct=RELEASE;
       break;
 int rate=read_num(3);
-AllMotors[inByte-1].setSpeed(rate);
-AllMotors[inByte-1].run(direct);
+AllMotors[inByte].setSpeed(rate);
+AllMotors[inByte].run(direct);
 }
 
 }

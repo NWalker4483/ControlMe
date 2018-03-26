@@ -3,10 +3,7 @@ import datetime
 import time
 from PIL import Image
 import numpy as np
-try:
-    import freenect
-except:
-    print('No Kinect')
+
 
 class VideoCamera(object):
     def __init__(self,kinect=False,pixelsize=None):
@@ -15,11 +12,17 @@ class VideoCamera(object):
         # instead.
         self.pixelsize=pixelsize
         self.capstr="Capturing"
-        self.kinect=kinect
         if kinect:
-            import freenect
-            self.video=freenect
-            
+            try:
+                import freenect
+                self.video=freenect
+                self.kinect=kinect
+            except ModuleNotFoundError:
+                print('No Kinect')
+                self.video = cv2.VideoCapture(0)
+                self.video.set(3,640)
+                self.video.set(4,480) 
+                self.kinect=False 
         else:
             self.video = cv2.VideoCapture(0)
             self.video.set(3,640)
@@ -129,9 +132,10 @@ class VideoCamera(object):
             font, 
             fontScale,
             fontColor,
-            lineType)'''
-        ret, jpeg = cv2.imencode('.jpg', image)
-        return jpeg.tobytes()
+            lineType)
+        '''
+        
+        return image
 def pixelate(_image,pixelSize=32):
     backgroundColor = (0,)*3
     _image = cv2.flip(_image,1)
