@@ -35,6 +35,10 @@ margin: auto 4px 12px 4px;
 vertical-align: middle;
 }
 
+.form-control{
+    font-family:HelveticaNeue-UltraLight, Arial, sans-serif;
+
+}
 .containerOff{
 width:152px;
 height:152px;

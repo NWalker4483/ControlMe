@@ -25,8 +25,9 @@ data1=np.rot90(data1,1, (1,0))
 for i in range(len(data)):
     slip.append(np.diff(data1[i])/np.diff(data[i]))
 slip=np.array(slip, dtype=np.uint8)
-data=np.concatenate((slip, data), axis=1)
-#data=np.gradient(data)[1]
+slip=np.gradient(slip)[1]
+data=np.concatenate((slip, data1), axis=1)
+
 #data = np.stack((data,data1), axis=len(data[0].shape))
 cv2.imshow("",data)
 cv2.waitKey(0)

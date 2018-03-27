@@ -21,7 +21,7 @@ def de_way(joyXValue,joyYValue):
     speedRight = 0 
 
     motorSpeed = 0 
-    motorSpeedMax = 255 
+    motorSpeedMax = 180 
     motorSpeedMin = 45  # #set to smallest value that make motor move (default 0)
                             #  # DC motor that I use start to move at 90 pwm value
     def constrain(val, min_val, max_val):

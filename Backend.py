@@ -1,7 +1,8 @@
 ##MODULES
-from flask import Flask, render_template,  Markup, Response
+from flask import Flask, render_template,  Markup, Response,request,flash, jsonify
 from flask_socketio import SocketIO, emit
 import os, datetime, time
+
 
 from Engine import Engine
 from ignore import de_way #for joysticking
@@ -12,13 +13,24 @@ from Pull_Push import Linear_Actuator
 #SETTINGS
 test_environment = True
 Kinect=True
-secure=False
+secure=True
 async_mode = "threading"
+Listening=True
 Verbose=True
+
 if not Verbose:
 	import logging
 	log = logging.getLogger("werkzeug")
 	log.setLevel(logging.ERROR)
+
+if Listening:
+	from chatterbot import ChatBot
+	from chatterbot.trainers import ChatterBotCorpusTrainer
+	english_bot = ChatBot("zee")
+	english_bot.set_trainer(ChatterBotCorpusTrainer)
+	english_bot.train("chatterbot.corpus.english")
+	english_bot.train('chatterbot.corpus.english.greetings')
+	english_bot.train('chatterbot.corpus.english.conversations')
 
 
 def make_controls(a,b):
@@ -46,11 +58,11 @@ global Sliders
 Sliders=["A","B"]
 Buttname = ["shoulder_bottom_right",'shoulder_top_right']
 accName= [["Conveyor Belt", "Front Light", "Back Light", "Bright Light"]]
-Buttpin = [[7, 17, 27, 22]]
+#Buttpin = [[7, 17, 27, 22]]
 
 for i in range(len(Sliders)):
 	if i<4:
-		Actuators[Sliders[i]]=Linear_Actuator(lets="1234"[i])
+		Actuators[Sliders[i]]=Linear_Actuator(lets="0123"[i])
 
 @app.route("/")
 def main():
@@ -98,6 +110,20 @@ def gen(camera):
 def video_feed():
     return Response(gen(VideoCamera(Kinect)),
                     mimetype="multipart/x-mixed-replace; boundary=frame")
+if Listening:
+	@app.route("/ask", methods=['POST'])
+	def ask():
+		message = (request.form['messageText'])
+
+		while True:
+			if message == "":
+				continue
+			else:
+				com=message.split()
+				print(message)
+				bot_response = str(english_bot.get_response(message))
+				# print bot_response
+				return jsonify({'status':'OK','answer':bot_response})
 
 if __name__ == "__main__":
 	if secure is True:

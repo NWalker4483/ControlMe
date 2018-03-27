@@ -88,5 +88,7 @@ http://www.vagostudio.com/giulio/wp-content/uploads/2014/04/SR_2014.pdf
 # Network
 * https://ariandy1.wordpress.com/2013/04/18/wifi-access-point-with-tp-link-tl-wn722n-on-ubuntu-12-04/
 * http://acumen.lib.ua.edu/u0015/0000001/0002182/u0015_0000001_0002182.pdf
+# Localization
+* https://johnroach.io/2011/02/16/getting-raw-data-from-a-usb-mouse-in-linux-using-python/v
 # Cleaning Data 
 * https://ocefpaf.github.io/python4oceanographers/blog/2014/10/20/gridfill/
