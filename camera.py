@@ -12,21 +12,17 @@ class VideoCamera(object):
         # instead.
         self.pixelsize=pixelsize
         self.capstr="Capturing"
-        if kinect:
-            try:
-                import freenect
-                self.video=freenect
-                self.kinect=kinect
-            except ModuleNotFoundError:
-                print('No Kinect')
-                self.video = cv2.VideoCapture(0)
-                self.video.set(3,640)
-                self.video.set(4,480) 
-                self.kinect=False 
-        else:
+        
+        try:
+            import freenect
+            self.video=freenect
+            self.kinect=kinect
+        except ImportError:
+            print('No Kinect')
             self.video = cv2.VideoCapture(0)
             self.video.set(3,640)
-            self.video.set(4,480)
+            self.video.set(4,480) 
+            self.kinect=False 
         # If you decide to use video.mp4, you must have this file in the folder
         # as the main.py.
         # self.video = cv2.VideoCapture('video.mp4')
