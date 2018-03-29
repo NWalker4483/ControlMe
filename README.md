@@ -92,3 +92,6 @@ http://www.vagostudio.com/giulio/wp-content/uploads/2014/04/SR_2014.pdf
 * https://johnroach.io/2011/02/16/getting-raw-data-from-a-usb-mouse-in-linux-using-python/v
 # Cleaning Data 
 * https://ocefpaf.github.io/python4oceanographers/blog/2014/10/20/gridfill/
+# Mapping
+* cv2.normalize(depth_array, depth_array, 0, 1, cv2.NORM_MINMAX)
+* https://github.com/stetro/objScanner
