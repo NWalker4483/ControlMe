@@ -15,7 +15,7 @@ test_environment = True
 Kinect=True
 secure=True
 async_mode = "threading"
-Listening=True
+Listening=False
 Verbose=True
 
 if not Verbose:
