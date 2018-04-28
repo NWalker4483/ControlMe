@@ -33,6 +33,7 @@ if Listening:
 	english_bot.train('chatterbot.corpus.english.conversations')
 
 
+
 def make_controls(a,b):
 	controls=" gamepad.setCustomMapping('keyboard', {'button_1': 32,'start': 27,'d_pad_up': [38, 87],'d_pad_down': [40, 83],'d_pad_left': [37, 65],'d_pad_right': [39, 68]});"
 	for i in zip(a,b):
@@ -79,7 +80,8 @@ def main():
 @socketio.on("joystick", namespace="/test")    
 def steering(message):
 	print(message['motor'])
-	de_way(message["value"][0],message["value"][1])
+	_right,_left=de_way(message["value"][0],message["value"][1])
+	Actuators["A"].drive(_right,_left)
 def dir(x):
 	return "F" if x>=50 else "R"
 
