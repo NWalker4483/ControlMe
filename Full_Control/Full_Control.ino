@@ -1,20 +1,35 @@
 
 #include<AFMotor.h>
-#include <Servo.h>
-
+#include "SoftwareSerial.h"
+#define rxPin 8  // pin 3 connects to smcSerial TX  (not used in this example)
+#define RightMotor 4  // pin 3 connects to smcSerial RX  (not used in this example)
+#define LeftMotor 3  // pin 3 connects to smcSerial RX  (not used in this example)
+#define LiftArm 5
+#define txPin 4
+// pin 4 connects to smcSerial RX
 int rate;
-int rdir;
-int ldir;
-int right;
-int left;
-//Servo myservo;
-//AF_DCMotor motor1(1);
-//AF_DCMotor motor2(2);
-//AF_DCMotor motor3(3);
-//AF_DCMotor motor4(4);
-//AF_DCMotor AllMotors[4] = {motor1, motor2, motor3, motor4};
-uint8_t direct;
+SoftwareSerial motor1 = SoftwareSerial(rxPin, RightMotor);
+SoftwareSerial motor2 = SoftwareSerial(rxPin, LeftMotor);
+SoftwareSerial motor3 = SoftwareSerial(rxPin, LiftArm);
+SoftwareSerial motor4 = SoftwareSerial(rxPin, txPin);
+SoftwareSerial AllMotors[4] = {motor1, motor2, motor3, motor4};
+int direct;
+int motor;
 byte inByte;
+int get_speed(){
+  switch(Serial.read()) {
+   case 'F':
+      rate=read_num(4);
+      break; 
+   case 'B':
+      rate=read_num(4)*-1;
+      break;
+   case 'R':
+      rate=0;
+      break;
+}
+return rate;
+  }
 //Convert Serial input in to an integer value: given number of digits
 int read_num(int numberOfDigits){
   char theNumberString[numberOfDigits + 1];
@@ -24,92 +39,47 @@ int read_num(int numberOfDigits){
   theNumber = atoi(theNumberString);
   return theNumber;
 }
+void setMotorSpeed(int speed,int motor)
+{
+  if (speed < 0)
+  {
+    AllMotors[motor].write(0x86);  // motor reverse command
+    speed = -speed;  // make speed positive
+  }
+  else
+  {
+    motor.write(0x85);  // motor forward command
+  }
+  AllMotors[motor].write(speed & 0x1F);
+  AllMotors[motor].write(speed >> 5);
+}
 void setup() {
-    
-  //Setup Channel A
-  pinMode(12, OUTPUT); //Initiates Motor Channel A pin
-  pinMode(9, OUTPUT); //Initiates Brake Channel A pin
-
-  //Setup Channel B
-  pinMode(13, OUTPUT); //Initiates Motor Channel A pin
-  pinMode(8, OUTPUT);
-  
   Serial.begin(9600);
   Serial.println("Initialized");
   // put your setup code here, to run once:
 for (int i=0;i<4;i++){
-  //AllMotors[i].setSpeed(255);
-}
+  AllMotors[i].begin(19200);
+  delay(5);
+  AllMotors[i].write(0xAA);
+  AllMotors[i].write(0x83);
+} 
+delay(5);
   //myservo.attach(9);
 }
 void loop() {
 if (Serial.available())
 { //myservo.attach(9);
-  delay(500);
+  delay(50);
 inByte=read_num(1);
-if (inByte < 4){
-//Read the direction of the actuator
-switch(Serial.read()) {
-   case 'F':
-      direct=FORWARD;
-      break; 
-   case 'B':
-      direct=BACKWARD;
-      
-      break;
-   case 'R':
-      direct=RELEASE;
-      break;
+if (inByte <= 1){
+setMotorSpeed(get_speed,inByte);
+setMotorSpeed(get_speed,inByte);
 }
-rate=read_num(3);
-//AllMotors[inByte].setSpeed(rate);
-//AllMotors[inByte].run(direct);
-}
-if (inByte==4){
-switch(Serial.read()) {
-   case 'F':
-      direct=FORWARD;
-      digitalWrite(12, HIGH); //Establishes forward direction of Channel A
-      digitalWrite(9, LOW);   //Disengage the Brake for Channel A
-    
-      break; 
-   case 'B':
-      direct=BACKWARD;
-        digitalWrite(12, LOW); //Establishes forward direction of Channel B
-        digitalWrite(9, LOW);  //Spins the motor on Channel B at full speed
-      break;
-   case 'R':
-      direct=RELEASE;
-      digitalWrite(9, HIGH);
-      break;
-}
-right=read_num(3);
-analogWrite(3, rate);
-//AllMotors[0].setSpeed(right);
-//AllMotors[0].run(direct);
-switch(Serial.read()) {
-   case 'F':
-      direct=FORWARD;
-      digitalWrite(13, HIGH); //Establishes forward direction of Channel B
-        digitalWrite(8, LOW); 
-      break; 
-   case 'B':
-      direct=BACKWARD;
-      digitalWrite(13, LOW); //Establishes forward direction of Channel B
-        digitalWrite(8, LOW);  
-      break;
-   case 'R':
-      direct=RELEASE;
-       digitalWrite(9, HIGH);
-      break;
-}
-left=read_num(3);
-analogWrite(11, rate);
-//AllMotors[1].setSpeed(left);
-//AllMotors[1].run(direct);
+else {
+setMotorSpeed(get_speed,inByte);
 
 }
-Serial.println(left);
-Serial.println(right);
+//Serial.println(left);
+//Serial.println(right);
 }}
 
