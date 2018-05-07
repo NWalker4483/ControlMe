@@ -20,8 +20,8 @@ class VideoCamera(object):
         except ImportError:
             print('No Kinect')
             self.video = cv2  .VideoCapture(0)
-            self.video.set(3,100)
-            self.video.set(4,100) 
+            self.video.set(3,64)
+            self.video.set(4,64) 
             self.kinect=False 
         # If you decide to use video.mp4, you must have this file in the folder
         # as the main.py.
@@ -110,7 +110,7 @@ class VideoCamera(object):
 
         else:
             success, image = self.video.read()
-            image=imutils.resize(image,width=150)
+            image=imutils.resize(image,width=32)
         if self.pixelsize!=None:
             image=self.pixelate(image,self.pixelsize)
         #image=cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)

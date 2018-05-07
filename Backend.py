@@ -13,7 +13,7 @@ from Pull_Push import Linear_Actuator
 #SETTINGS
 test_environment = True
 Kinect=True
-secure=True
+secure=False
 async_mode = "threading"
 Listening=False
 Verbose=True
@@ -34,16 +34,19 @@ if Listening:
 
 
 
-def make_controls(a,b):
+def make_controls(a):
 	controls=" gamepad.setCustomMapping('keyboard', {'button_1': 32,'start': 27,'d_pad_up': [38, 87],'d_pad_down': [40, 83],'d_pad_left': [37, 65],'d_pad_right': [39, 68]});"
-	for i in zip(a,b):
-		controls+="gamepad.on('press', '{0}', e => {{ socket.emit('robot', {{motor: '{1}' ,value:'GO'}});}});".format(i[0],i[1])
-		controls+="gamepad.on('release', '{0}', e => {{socket.emit('robot', {{motor: '{1}' ,value:'STOP'}});}});".format(i[0],i[1])
+	for motor in a:
+		controls+="gamepad.on('press', '{0}', e => {{ socket.emit('robot', {{motor: '{1}' ,value:'F'}});}});".format(a[motor][1],motor)
+		controls+="gamepad.on('release', '{0}', e => {{socket.emit('robot', {{motor: '{1}' ,value:'R'}});}});".format(a[motor][1],motor)
+		controls+="gamepad.on('press', '{0}', e => {{ socket.emit('robot', {{motor: '{1}' ,value:'B'}});}});".format(a[motor][2],motor)
+		controls+="gamepad.on('release', '{0}', e => {{socket.emit('robot', {{motor: '{1}' ,value:'R'}});}});".format(a[motor][2],motor)
+	
 	return controls
 
 
-global Actuators
-Actuators=dict()
+global Motors
+Motors=Linear_Actuator()
 
 
 
@@ -52,18 +55,9 @@ app.config["SECRET_KEY"] = "secret!"
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 socketio = SocketIO(app, async_mode=async_mode)
 
-	
 
-global Sliders
-
-Sliders=["A","B"]
-Buttname = ["shoulder_bottom_right",'shoulder_top_right']
-accName= [["Conveyor Belt", "Front Light", "Back Light", "Bright Light"]]
-#Buttpin = [[7, 17, 27, 22]]
-
-for i in range(len(Sliders)):
-	if i<4:
-		Actuators[Sliders[i]]=Linear_Actuator(lets="0123"[i])
+Motor_Names={"Lift Arm":(2,"shoulder_bottom_right",'shoulder_top_right'),\
+             "Scoop":(3,"button_1","button_2")}
 
 @app.route("/")
 def main():
@@ -73,7 +67,7 @@ def main():
 	thread.start()
 	templateData = {
 		"title" : "MSU RMC Control Center",
-		"controls": make_controls(Buttname,Sliders)
+		"controls": make_controls(Motor_Names)
 	}
 	return render_template("main.html",**templateData)
 
@@ -81,7 +75,7 @@ def main():
 def steering(message):
 	print(message['motor'])
 	_right,_left=de_way(message["value"][0],message["value"][1])
-	Actuators["A"].drive(_right,_left)
+	Motors.drive(_right,_left)
 def dir(x):
 	return "F" if x>=50 else "R"
 
@@ -92,21 +86,15 @@ def handle_robot(message):
 	##############################################
 	###########Button    motor    dir    #########
 	thread.flow[message["motor"]]=message["value"]
-	if message["value"]=="GO" and message["motor"]=="shoulder_bottom_right":
-		Actuators["1"].move("F",100)
-	if message["value"]=="GO" and message["motor"]=="shoulder_top_right":
-		Actuators["1"].move("B",100)
-	if message["value"]=="STOP":
-		Actuators["1"].move("R",0)
-	if message["motor"] in Sliders:
-		Actuators[message["motor"]].move(dir(int(message["value"])),int(message["value"]))
+        if message["motor"] in Motor_Names:
+		Motors.move(Motor_Names[message["motor"]][0],message["value"],100)
 
 def gen(camera):
-	while True:
-		frame = camera.get_frame(depth=True)
-		frame=cv2.imencode('.jpg',frame)[1].tobytes()
-		yield (b"--frame\r\n"
-				b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n")
+    while True:
+	    frame = camera.get_frame()
+	    frame=cv2.imencode('.jpg',frame)[1].tobytes()
+	    yield (b"--frame\r\n"
+	    		b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n\r\n")
 
 @app.route("/video_feed")
 def video_feed():
