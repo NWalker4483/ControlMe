@@ -5,9 +5,7 @@
 
 
 def de_way(joyXValue,joyYValue):
-   # joyXValue = analogRead(joyStickXPin)   #Turn
-   # joyYValue = analogRead(joyStickYPin)   #Forward/backward
-
+    
     joyValueMax = 100 
     joyValueMin = -100 
     joyValueMid = 0 
@@ -21,8 +19,8 @@ def de_way(joyXValue,joyYValue):
     speedRight = 0 
 
     motorSpeed = 0 
-    motorSpeedMax = 180 
-    motorSpeedMin = 45  # #set to smallest value that make motor move (default 0)
+    motorSpeedMax = 3200
+    motorSpeedMin = -3200  # #set to smallest value that make motor move (default 0)
                             #  # DC motor that I use start to move at 90 pwm value
     def constrain(val, min_val, max_val):
         if val < min_val: return min_val
@@ -50,7 +48,7 @@ def de_way(joyXValue,joyYValue):
 
     speedLeft = speedFwd + speedTurn 
     speedRight = speedFwd - speedTurn 
-
+    print(str(int(speedLeft))+" : "+ str(int(speedRight)))
     speedLeft = constrain(speedLeft, motorSpeedMin, motorSpeedMax) 
     speedRight = constrain(speedRight, motorSpeedMin, motorSpeedMax) 
     
@@ -61,7 +59,7 @@ def de_way(joyXValue,joyYValue):
 
     print(str(int(speedLeft))+" : "+str(int(speedRight)))
 
-    return (str(int(speedLeft))+str(int(speedRight)))
+    return int(speedRight),int(speedLeft)
     
 '''
 def MoveRobot( spdL,  spdR):
