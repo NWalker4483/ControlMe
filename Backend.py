@@ -86,7 +86,7 @@ def handle_robot(message):
 	##############################################
 	###########Button    motor    dir    #########
 	thread.flow[message["motor"]]=message["value"]
-        if message["motor"] in Motor_Names:
+	if message["motor"] in Motor_Names:
 		Motors.move(Motor_Names[message["motor"]][0],message["value"],100)
 
 def gen(camera):

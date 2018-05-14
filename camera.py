@@ -7,10 +7,11 @@ import numpy as np
 
 import imutils
 class VideoCamera(object):
-    def __init__(self,kinect=False,pixelsize=None):
+    def __init__(self,kinect=False,pixelsize=None,res=64):
         # Using OpenCV to capture from device 0. If you have trouble capturing
         # from a webcam, comment the line below out and use a video file
         # instead.
+        self.res=res
         self.pixelsize=pixelsize
         self.capstr="Capturing"
         
@@ -111,7 +112,8 @@ class VideoCamera(object):
 
         else:
             success, image = self.video.read()
-            image=imutils.resize(image,width=32)
+            image=imutils.resize(image,width=self.res)
+            image=cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
         if self.pixelsize!=None:
             image=self.pixelate(image,self.pixelsize)
         #image=cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)

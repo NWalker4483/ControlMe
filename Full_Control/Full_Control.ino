@@ -2,31 +2,57 @@
 #include<AFMotor.h>
 #include "SoftwareSerial.h"
 #define rxPin 8  // pin 3 connects to smcSerial TX  (not used in this example)
-#define RightMotor 4  // pin 3 connects to smcSerial RX 
-#define LeftMotor 3  // pin 3 connects to smcSerial RX  
-#define LiftArm 5
-#define Scoop 6
+#define RightMotor 4  // Serial Transimission Pin on Arduino 
+#define LeftMotor 3  // Serial Transimission Pin on Arduino 
+#define LiftArm 5  // Serial Transimission Pin on Arduino 
+#define Dump_Lower 9  // Serial Transimission Pin on Arduino 
+#define Dump_Limiter_Low 12
+#define Dump_Limiter 11  // Limiter Read Pin on Arduino 
+#define Dump_Upper 10  // Serial Transimission Pin on Arduino 
+#define Scoop 6 // PWM Out Pin on Arduino 
 #define txPin 4
-// pin 4 connects to smcSerial RX// RX, TX, plug your control line into pin 8 and connect it to the RX pin on the JRK21v3
 
-//sets the new target for the JRK21V3 controller, this uses pololu high resulution protocal
 
-SoftwareSerial motor1 = SoftwareSerial(rxPin, RightMotor);
-SoftwareSerial motor2 = SoftwareSerial(rxPin, LeftMotor);
-SoftwareSerial motor3 = SoftwareSerial(rxPin, LiftArm);
-SoftwareSerial motor4 = SoftwareSerial(rxPin, txPin);
-SoftwareSerial AllMotors[4] = {motor1, motor2, motor3, motor4};
+SoftwareSerial AllMotors[4] = {SoftwareSerial(rxPin, RightMotor),
+SoftwareSerial(rxPin, LeftMotor),
+SoftwareSerial(rxPin, LiftArm), 
+SoftwareSerial(rxPin, txPin)};
+
 int direct;
 int rate;
 int motor;
 byte inByte;
      // Motor connected to digital pin 9
+void Extend(){
+  
+  while(digitalRead(Dump_Limiter)){
+    /* code */
+    
+}
+  while(digitalRead(Dump_Limiter_Low){
+    /* code */
+    
+}
+}
 
+void Retract(){
+  while(digitalRead(Dump_Limiter)==0){
+    /* code */
+    
+}
+  while(digitalRead(Dump_Limiter_Low==0){
+    /* code */
+    
+}
+  
+}
 //Read Direction and speed indicator from Serial
+
+//sets the new target for the JRK21V3 controller, this uses pololu high resulution protocal
 void Move(int x) {
   word target = x;  //only pass this ints, i tried doing math in this and the remainder error screwed something up
   AllMotors[2].write(0xAA); //tells the controller we're starting to send it commands
-  AllMotors[2].write(0xB);   //This is the pololu device # you're connected too that is found in the config utility(converted to hex). I'm using #11 in this example
+  AllMotors[2].write(0xB);   //This is the pololu device # you're connected too that is found in the config utility(converted to hex).
   AllMotors[2].write(0x40 + (target & 0x1F)); //first half of the target, see the pololu jrk manual for more specifics
   AllMotors[2].write((target >> 5) & 0x7F);   //second half of the target, " " "
 }  
@@ -54,7 +80,14 @@ int read_num(int numberOfDigits){
   theNumber = atoi(theNumberString);
   return theNumber;
 }
-void setMotorSpeed(int _speed, int motor)
+// pin 4 connects to smcSerial RX// RX, TX, plug your control line into pin 8 and connect it to the RX pin on the JRK21v3
+/*InByte dictionary 
+0:Drive Train 
+2:Lift Arm
+3:Scoop
+4:Dump
+*/
+void setSimpleMotorSpeed(int _speed, int motor)
 {
   
   if (_speed < 0)
@@ -74,10 +107,11 @@ void setup() {
   Serial.begin(9600);
   Serial.println("Initialized");
   // put your setup code here, to run once:
- pinMode(Scoop, OUTPUT);   // sets the pin as output
+  pinMode(Dump_Limiter, INPUT);  
+  pinMode(Scoop, OUTPUT);   // sets the pin as output
 
-for (int i=0;i<4;i++){
-  AllMotors[i].begin(9600);//19200);
+for (int i=0;i<sizeof(AllMotors)/sizeof(AllMotors[0]);i++){
+  AllMotors[i].begin(9600);//19200);//Baud-Rate
   delay(5);
   AllMotors[i].write(0xAA);
   //AllMotors[i].write(0x83);
@@ -91,8 +125,8 @@ if (Serial.available())
   delay(50);
 inByte=read_num(1);
 if (inByte == 0){
-setMotorSpeed(get_speed(),0);
-setMotorSpeed(get_speed(),1);
+setSimpleMotorSpeed(get_speed(),0);
+setSimpleMotorSpeed(get_speed(),1);
 }
 else {
   if (inByte==3)
@@ -102,7 +136,7 @@ else {
   {Move(get_speed());
   }
   else{
-setMotorSpeed(get_speed(),inByte);
+setSimpleMotorSpeed(get_speed(),inByte);
   }
 }
 //Serial.println(left);
