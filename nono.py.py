@@ -24,10 +24,7 @@ def nothing(one):
 # create trackbars for color change
 cv2.createTrackbar('H1','image',0,255,nothing)
 cv2.createTrackbar('S1','image',0,255,nothing)
-cv2.createTrackbar('V1','image',0,255,nothing)
-cv2.createTrackbar('H2','image',0,255,nothing)
-cv2.createTrackbar('S2','image',0,255,nothing)
-cv2.createTrackbar('V2','image',0,255,nothing)
+
 
 # create switch for ON/OFF functionality
 
@@ -40,35 +37,31 @@ def gen():
         
         ret, frame = cap.read()
         frame=imutils.resize(frame,width=300,height=300)
-
-        #frame=cv2.cvtColor(i,cv2.COLOR_BGR2GRAY)
+        r = frame.copy()
+        # set blue and green channels to 0
+        r[:, :, 0] = 0
+        r[:, :, 1] = 0
+        frame=cv2.cvtColor(r,cv2.COLOR_RGB2GRAY)
+        #ret, mask = cv2.threshold(frame, 125, 255, cv2.THRESH_BINARY)
         if ret:
-            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HLS)
+            #hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
             h1 = cv2.getTrackbarPos('H1','image')
             s1 = cv2.getTrackbarPos('S1','image')
-            v1 = cv2.getTrackbarPos('V1','image')
-            h2 = cv2.getTrackbarPos('H2','image')
-            s2 = cv2.getTrackbarPos('S2','image')
-            v2 = cv2.getTrackbarPos('V2','image')
-            lower_red = np.array([h1,s1,v1])
-            upper_red = np.array([h2,s2,v2])
-            
-            mask = cv2.inRange(hsv, lower_red, upper_red)
+            _,mask = cv2.threshold(frame, 125, 255, cv2.THRESH_BINARY)
 
             #mask=pixelate(cv2.blur(mask,(6,6)),16)
             
-            mask=cv2.resize(mask, (frame.shape[:2][::-1]), interpolation = cv2.INTER_AREA)
+            #mask=cv2.resize(mask, (frame.shape[:2][::-1]), interpolation = cv2.INTER_AREA)
             #
-            mask=np.array(mask, dtype=np.uint8)
-            mask= binary_closing(mask, structure=np.ones((6,3)))
+            #mask=np.array(mask, dtype=np.uint8)
+            #mask= binary_closing(mask, structure=np.ones((6,3)))
             mask=np.array(mask, dtype=np.uint8)*255
             #çprint(mask)
             #mask=pixelate(cv2.blur(mask,(6,6)),32)
-            mask=cv2.resize(mask, (frame.shape[:2][::-1]), interpolation = cv2.INTER_AREA)
-            ret, mask = cv2.threshold(mask, 125, 255, cv2.THRESH_BINARY)
+            #mask=cv2.resize(mask, (frame.shape[:2][::-1]), interpolation = cv2.INTER_AREA)
+           # ret, mask = cv2.threshold(mask, 125, 255, cv2.THRESH_BINARY)
             #print(mask.shape,(frame.shape[:2]))
             res = cv2.bitwise_and(frame,frame, mask= mask)
-        
 
 
         
