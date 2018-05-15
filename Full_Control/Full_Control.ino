@@ -1,7 +1,8 @@
 
 #include<AFMotor.h>
 #include "SoftwareSerial.h"
-#define rxPin 8  // pin 3 connects to smcSerial TX  (not used in this example)
+#define SpeedLength 3
+#define rxPin 2  // pin 3 connects to smcSerial TX  (not used in this example)
 #define RightMotor 4  // Serial Transimission Pin on Arduino 
 #define LeftMotor 3  // Serial Transimission Pin on Arduino 
 #define LiftArm 5  // Serial Transimission Pin on Arduino 
@@ -23,29 +24,31 @@ int rate;
 int motor;
 byte inByte;
      // Motor connected to digital pin 9
+     /*
 void Extend(){
   
   while(digitalRead(Dump_Limiter)){
-    /* code */
+
     
 }
   while(digitalRead(Dump_Limiter_Low){
-    /* code */
+
     
 }
 }
 
 void Retract(){
   while(digitalRead(Dump_Limiter)==0){
-    /* code */
+
     
 }
   while(digitalRead(Dump_Limiter_Low==0){
-    /* code */
+   
     
 }
   
 }
+*/
 //Read Direction and speed indicator from Serial
 
 //sets the new target for the JRK21V3 controller, this uses pololu high resulution protocal
@@ -59,14 +62,18 @@ void Move(int x) {
 int get_speed(){
   switch(Serial.read()) {
    case 'F':
-      rate=read_num(3);
+      rate=read_num(SpeedLength);
       break; 
    case 'B':
-      rate=read_num(3)*-1;
+      rate=read_num(SpeedLength)*-1;
       break;
    case 'R':
       rate=0;
       break;
+  default:
+      rate=read_num(SpeedLength);
+      break;
+
 }
 Serial.println(rate);
 return rate;
@@ -124,20 +131,20 @@ if (Serial.available())
 { //myservo.attach(9);
   delay(50);
 inByte=read_num(1);
-if (inByte == 0){
+switch (inByte ){
+case 0:
 setSimpleMotorSpeed(get_speed(),0);
 setSimpleMotorSpeed(get_speed(),1);
-}
-else {
-  if (inByte==3)
-  {analogWrite(Scoop,abs(get_speed())%255);
-  }
-  if (inByte==2)
-  {Move(get_speed());
-  }
-  else{
-setSimpleMotorSpeed(get_speed(),inByte);
-  }
+break;
+case 2: 
+Move(get_speed());
+break;
+case 3:
+analogWrite(Scoop,get_speed()%255);
+break;
+default:
+analogWrite(Scoop,inByte%255);
+break;
 }
 //Serial.println(left);
 //Serial.println(right);

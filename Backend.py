@@ -37,10 +37,10 @@ if Listening:
 def make_controls(a):
 	controls=" gamepad.setCustomMapping('keyboard', {'button_1': 32,'start': 27,'d_pad_up': [38, 87],'d_pad_down': [40, 83],'d_pad_left': [37, 65],'d_pad_right': [39, 68]});"
 	for motor in a:
-		controls+="gamepad.on('press', '{0}', e => {{ socket.emit('robot', {{motor: '{1}' ,value:'F'}});}});".format(a[motor][1],motor)
-		controls+="gamepad.on('release', '{0}', e => {{socket.emit('robot', {{motor: '{1}' ,value:'R'}});}});".format(a[motor][1],motor)
-		controls+="gamepad.on('press', '{0}', e => {{ socket.emit('robot', {{motor: '{1}' ,value:'B'}});}});".format(a[motor][2],motor)
-		controls+="gamepad.on('release', '{0}', e => {{socket.emit('robot', {{motor: '{1}' ,value:'R'}});}});".format(a[motor][2],motor)
+		controls+="gamepad.on('press', '{0}', e => {{ socket.emit('robot', {{motor: '{1}' ,value:[{2},{3}]}});}});".format(a[motor][1],motor,a[motor][4][0],a[motor][3][0])
+		controls+="gamepad.on('release', '{0}', e => {{socket.emit('robot', {{motor: '{1}' ,value:[0,{2}]}});}});".format(a[motor][1],motor,a[motor][3][2])
+		controls+="gamepad.on('press', '{0}', e => {{ socket.emit('robot', {{motor: '{1}' ,value:[{2},{3}]}});}});".format(a[motor][2],motor,a[motor][4][1],a[motor][3][1])
+		controls+="gamepad.on('release', '{0}', e => {{socket.emit('robot', {{motor: '{1}' ,value:[0,{2}]}});}});".format(a[motor][2],motor,a[motor][3][2])
 	
 	return controls
 
@@ -56,8 +56,11 @@ app.config["TEMPLATES_AUTO_RELOAD"]=True
 socketio = SocketIO(app, async_mode=async_mode)
 
 
-Motor_Names={"Lift Arm":(2,"shoulder_bottom_right",'shoulder_top_right'),\
-             "Scoop":(3,"button_1","button_2")}
+#Name : inByte Button 1, Button 2, Available dirs , speeds
+Motor_Names={"Lift Arm":(2,"shoulder_bottom_left",'shoulder_top_leftt',['F','B','R'],[100,0]),\
+             "Scoop":(3,"shoulder_bottom_right",'shoulder_top_right',['N','N','N'],[100,50]),\
+			  "Dump_Lower":(4,"button_1","button_3",['F','B','R'],[100,0]),\
+			   "Dump_Upper":(5,"button_2","button_4",['F','B','R'],[100,0])}
 
 @app.route("/")
 def main():
@@ -87,7 +90,7 @@ def handle_robot(message):
 	###########Button    motor    dir    #########
 	thread.flow[message["motor"]]=message["value"]
 	if message["motor"] in Motor_Names:
-		Motors.move(Motor_Names[message["motor"]][0],message["value"],100)
+		Motors.move(Motor_Names[message["motor"]][0],message["value"][0],message["value"][1])
 
 def gen(camera):
     while True:

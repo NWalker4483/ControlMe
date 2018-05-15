@@ -1,4 +1,4 @@
-import serial
+1import serial
 class Linear_Actuator():
     def __init__(self,path="/dev/ttyACM",lets='1'):
         self.ratio=255/100
@@ -14,7 +14,7 @@ class Linear_Actuator():
                 print("Noduino")
        
              
-    def move(self,lets,dir,goal):
+    def move(self,lets,goal,dir='N'):
         if self.connected:
             self.path.write((str(lets)+ dir +str(int(goal*self.ratio))).encode('utf-8'))
     def direct(self,num):
