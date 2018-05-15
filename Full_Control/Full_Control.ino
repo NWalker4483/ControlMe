@@ -28,25 +28,20 @@ byte inByte;
      // Motor connected to digital pin 9
      /*
 void Extend(){
-  
   while(digitalRead(Dump_Limiter)){
-
-    
+ 
 }
   while(digitalRead(Dump_Limiter_Low){
-
     
 }
 }
 
 void Retract(){
   while(digitalRead(Dump_Limiter)==0){
-
     
 }
   while(digitalRead(Dump_Limiter_Low==0){
-   
-    
+  
 }
   
 }

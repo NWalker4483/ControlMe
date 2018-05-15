@@ -58,11 +58,11 @@ socketio = SocketIO(app, async_mode=async_mode)
 
 #Name : inByte Button 1, Button 2, Available dirs , speeds
 Motor_Names={"Lift Arm":(2,"shoulder_bottom_left",'shoulder_top_leftt',['F','B','R'],[100,100]),\
-             "Scoop":(3,"shoulder_bottom_right",'shoulder_top_right',['N','N','R'],[100,50]),\
+             "Scoop":(3,"shoulder_bottom_right",'shoulder_top_right',['F','F','R'],[100,50]),\
 			  "Dump_Lower":(4,"button_1","button_3",['F','B','R'],[100,100]),\
 			   "Dump_Upper":(5,"button_2","button_4",['F','B','R'],[100,100]),\
-			   "Right":(6,"d_pad_right","PlaceHolder",['N','N','R'],[100,100]),\
-			   "Left":(7,"d_pad_left","PlaceHolder",['N','N','R'],[100,100])
+			   "Right":(6,"d_pad_right","PlaceHolder",['F','N','R'],[100,100]),\
+			   "Left":(7,"d_pad_left","PlaceHolder",['F','N','R'],[100,100])
 			   }
 
 @app.route("/")
