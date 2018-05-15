@@ -3,8 +3,8 @@
 #include "SoftwareSerial.h"
 #define SpeedLength 3
 #define rxPin 2  // pin 3 connects to smcSerial TX  (not used in this example)
-#define RightMotor 4  // Serial Transimission Pin on Arduino 
-#define LeftMotor 3  // Serial Transimission Pin on Arduino 
+#define RightMotor 4  // Serial or PWM Transimission Pin on Arduino 
+#define LeftMotor 3  // Serial or PWM Transimission Pin on Arduino 
 #define LiftArm 5  // Serial Transimission Pin on Arduino 
 #define Dump_Lower 9  // Serial Transimission Pin on Arduino 
 #define Dump_Limiter_Low 12
@@ -167,7 +167,7 @@ analogWrite(RightMotor,get_speed()%255);
 case 7:
 analogWrite(LefttMotor,get_speed()%255);
 default:
-analogWrite(Scoop,inByte%255);
+analogWrite(inByte,get_speed()%255);
 break;
 }
 //Serial.println(left);
