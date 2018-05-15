@@ -94,6 +94,7 @@ def handle_robot(message):
 	thread.flow[message["motor"]]=message["value"]
 	if message["motor"] in Motor_Names:
 		Motors.move(Motor_Names[message["motor"]][0],message["value"][0],message["value"][1])
+		print('gog')
 
 def gen(camera):
     while True:
