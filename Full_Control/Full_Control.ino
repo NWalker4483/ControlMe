@@ -14,9 +14,11 @@
 #define txPin 4
 
 
-SoftwareSerial AllMotors[4] = {SoftwareSerial(rxPin, RightMotor),
-SoftwareSerial(rxPin, LeftMotor),
+SoftwareSerial AllMotors[4] = {SoftwareSerial(rxPin, 11),
+SoftwareSerial(rxPin, 10),
 SoftwareSerial(rxPin, LiftArm), 
+SoftwareSerial(rxPin, Dump_Upper), 
+SoftwareSerial(rxPin, Dump_Lower), 
 SoftwareSerial(rxPin, txPin)};
 
 int direct;
@@ -52,12 +54,17 @@ void Retract(){
 //Read Direction and speed indicator from Serial
 
 //sets the new target for the JRK21V3 controller, this uses pololu high resulution protocal
-void Move(int x) {
-  word target = x;  //only pass this ints, i tried doing math in this and the remainder error screwed something up
-  AllMotors[2].write(0xAA); //tells the controller we're starting to send it commands
-  AllMotors[2].write(0xB);   //This is the pololu device # you're connected too that is found in the config utility(converted to hex).
-  AllMotors[2].write(0x40 + (target & 0x1F)); //first half of the target, see the pololu jrk manual for more specifics
-  AllMotors[2].write((target >> 5) & 0x7F);   //second half of the target, " " "
+void Move(int x,int _motor) {
+  if (x>0){
+  word target = int(x*(4098/255));  
+  }
+  else{
+    word target = int(x*(2048/255));  
+  }//only pass this ints, i tried doing math in this and the remainder error screwed something up
+  AllMotors[_motor].write(0xAA); //tells the controller we're starting to send it commands
+  AllMotors[_motor].write(0xB);   //This is the pololu device # you're connected too that is found in the config utility(converted to hex).
+  AllMotors[_motor].write(0x40 + (target & 0x1F)); //first half of the target, see the pololu jrk manual for more specifics
+  AllMotors[_motor].write((target >> 5) & 0x7F);   //second half of the target, " " "
 }  
 int get_speed(){
   switch(Serial.read()) {
@@ -87,7 +94,7 @@ int read_num(int numberOfDigits){
   theNumber = atoi(theNumberString);
   return theNumber;
 }
-// pin 4 connects to smcSerial RX// RX, TX, plug your control line into pin 8 and connect it to the RX pin on the JRK21v3
+
 /*InByte dictionary 
 0:Drive Train 
 2:Lift Arm
@@ -115,7 +122,9 @@ void setup() {
   Serial.println("Initialized");
   // put your setup code here, to run once:
   pinMode(Dump_Limiter, INPUT);  
-  pinMode(Scoop, OUTPUT);   // sets the pin as output
+  pinMode(Scoop, OUTPUT); 
+  pinMode(RightMotor,OUTPUT);
+  pinMode(LeftMotor,OUTPUT);  // sets the pin as output
 
 for (int i=0;i<sizeof(AllMotors)/sizeof(AllMotors[0]);i++){
   AllMotors[i].begin(9600);//19200);//Baud-Rate
@@ -129,18 +138,29 @@ delay(50);
 void loop() {
 if (Serial.available())
 { //myservo.attach(9);
-  delay(50);
+  delay(5);
 inByte=read_num(1);
 switch (inByte ){
 case 0:
+
 setSimpleMotorSpeed(get_speed(),0);
 setSimpleMotorSpeed(get_speed(),1);
+
 break;
+case 1:
+analogWrite(RightMotor,get_speed()%255);
+analogWrite(LefttMotor,get_speed()%255);
 case 2: 
-Move(get_speed());
+Move(get_speed(),2);
 break;
 case 3:
 analogWrite(Scoop,get_speed()%255);
+break;
+case 4:
+Move(get_speed(),4);
+break;
+case 5:
+Move(get_speed(),3);
 break;
 default:
 analogWrite(Scoop,inByte%255);
