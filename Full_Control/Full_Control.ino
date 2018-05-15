@@ -162,6 +162,10 @@ break;
 case 5:
 Move(get_speed(),3);
 break;
+case 6:
+analogWrite(RightMotor,get_speed()%255);
+case 7:
+analogWrite(LefttMotor,get_speed()%255);
 default:
 analogWrite(Scoop,inByte%255);
 break;
