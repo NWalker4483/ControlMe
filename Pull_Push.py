@@ -1,7 +1,7 @@
 import serial
 class Linear_Actuator():
     def __init__(self,path="/dev/ttyACM",lets='1'):
-        self.ratio=255/100
+        self.ratio=200/100
         self.connected=False
         for i in range(4):
             try:

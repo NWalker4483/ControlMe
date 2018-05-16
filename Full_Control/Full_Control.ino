@@ -14,12 +14,7 @@
 #define txPin 4
 
 
-SoftwareSerial AllMotors[4] = {SoftwareSerial(rxPin, 11),
-SoftwareSerial(rxPin, 10),
-SoftwareSerial(rxPin, LiftArm), 
-SoftwareSerial(rxPin, Dump_Upper), 
-SoftwareSerial(rxPin, Dump_Lower), 
-SoftwareSerial(rxPin, txPin)};
+SoftwareSerial AllMotors[4] = {SoftwareSerial(2,2),SoftwareSerial(2,2),SoftwareSerial(2,2),SoftwareSerial(2,2)};
 
 int direct;
 int rate;
@@ -30,15 +25,16 @@ byte inByte;
 //Read Direction and speed indicator from Serial
 void Drive(int y,int val){
   if (val<=0){
- digitalWrite(y,HIGH);
+analogWrite(y,200);
    }
   else{
-    digitalWrite(y,LOW);
+    analogWrite(y,0);
   }
 }
 
 //sets the new target for the JRK21V3 controller, this uses pololu high resulution protocal
 void Move(int x,int _motor) {
+  word target;
   if (x>0){
   word target = int(x*(4098/255));  
   }
@@ -136,7 +132,7 @@ setSimpleMotorSpeed(get_speed(),1);
 break;
 case 1:
 analogWrite(RightMotor,get_speed()%255);
-analogWrite(LefttMotor,get_speed()%255);
+analogWrite(LeftMotor,get_speed()%255);
 case 2: 
 Move(get_speed(),2);
 break;
@@ -152,7 +148,7 @@ break;
 case 6:
 Drive(RightMotor,get_speed()%255);
 case 7:
-Drive(LefttMotor,get_speed()%255);
+Drive(LeftMotor,get_speed()%255);
 default:
 analogWrite(inByte,get_speed()%255);
 break;
