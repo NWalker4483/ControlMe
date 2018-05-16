@@ -119,7 +119,7 @@ for (int i=0;i<sizeof(AllMotors)/sizeof(AllMotors[0]);i++){
   AllMotors[i].write(0xAA);
   //AllMotors[i].write(0x83);
 } 
-delay(50);
+delay(50); 
   //myservo.attach(9);
 }
 void loop() {
