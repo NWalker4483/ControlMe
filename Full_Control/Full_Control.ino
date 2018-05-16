@@ -26,27 +26,16 @@ int rate;
 int motor;
 byte inByte;
      // Motor connected to digital pin 9
-     /*
-void Extend(){
-  while(digitalRead(Dump_Limiter)){
- 
-}
-  while(digitalRead(Dump_Limiter_Low){
-    
-}
-}
 
-void Retract(){
-  while(digitalRead(Dump_Limiter)==0){
-    
-}
-  while(digitalRead(Dump_Limiter_Low==0){
-  
-}
-  
-}
-*/
 //Read Direction and speed indicator from Serial
+void Drive(int y,int val){
+  if (val<=0){
+ digitalWrite(y,HIGH);
+   }
+  else{
+    digitalWrite(y,LOW);
+  }
+}
 
 //sets the new target for the JRK21V3 controller, this uses pololu high resulution protocal
 void Move(int x,int _motor) {
@@ -120,6 +109,9 @@ void setup() {
   pinMode(Scoop, OUTPUT); 
   pinMode(RightMotor,OUTPUT);
   pinMode(LeftMotor,OUTPUT);  // sets the pin as output
+  digitalWrite(RightMotor,HIGH);
+  digitalWrite(Scoop,HIGH);
+  digitalWrite(LeftMotor,HIGH);
 
 for (int i=0;i<sizeof(AllMotors)/sizeof(AllMotors[0]);i++){
   AllMotors[i].begin(9600);//19200);//Baud-Rate
@@ -158,9 +150,9 @@ case 5:
 Move(get_speed(),3);
 break;
 case 6:
-analogWrite(RightMotor,get_speed()%255);
+Drive(RightMotor,get_speed()%255);
 case 7:
-analogWrite(LefttMotor,get_speed()%255);
+Drive(LefttMotor,get_speed()%255);
 default:
 analogWrite(inByte,get_speed()%255);
 break;
